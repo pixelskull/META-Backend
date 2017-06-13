@@ -1,12 +1,14 @@
 package main
 
 import (
+        "fmt"
         "log"
         "testing"
         "net/http"
         "io/ioutil"
         "strings"
         "os"
+        "bufio"
         )
 
 func TestBasicRequest(t *testing.T) {
@@ -16,7 +18,7 @@ func TestBasicRequest(t *testing.T) {
 
   // executing test case
   client := &http.Client{}
-  request, err := http.NewRequest("PUT", url, strings.NewReader(contentString))
+  request, err := http.NewRequest("PUT", url, strings.NewReader(contentString)) // TODO: check if curl -fileupload uses PUT
   if err != nil {
     t.Errorf("Creating Testing Basic Request Fails: " + err.Error())
   }
@@ -83,4 +85,22 @@ func TestBasicFileHandling(t *testing.T) {
 
 func TestBasicIRFileSaving(t *testing.T) {
   t.Error("not implemented yet...")
+}
+
+func TestTempFolderPreparation(t *testing.T) {
+  path := prepareTempFolder()
+  testFile := path + "/testfile"
+  file, err := os.OpenFile(testFile, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+  if err != nil {
+    t.Errorf("Testfile couldn't be created: " + err.Error())
+  }
+  defer file.Close()
+
+  writer := bufio.NewWriter(file)
+  _, err = fmt.Fprintf(writer, "test case was here...")
+  if err != nil {
+    t.Errorf("Testfile is not writeable: " + err.Error())
+  }
+
+
 }

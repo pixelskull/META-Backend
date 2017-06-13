@@ -33,13 +33,23 @@ func kafkaBrokerSetup() *kafka.Broker {
 	return broker
 }
 
+func prepareTempFolder() string{
+	tmpDir := os.TempDir()
+	path 	 := tmpDir + "META"
+	// create Folder and error handling
+	err		 := os.Mkdir(path, os.ModePerm) // TODO: check if umask problem still exists in tmp folder
+	if err != nil {
+		log.Fatalf("MkdirAll failed %q: %s", path, err)
+	}
+
+	return path
+}
+
 func performFileAction(hash string, contents []byte) {
 	log.Println("started goroutine for sending file to kafka")
 
 	broker := kafkaBrokerSetup()
 	producer := broker.Producer(kafka.NewProducerConf())
-
-
 
 	msg := &proto.Message{Value: contents}
 
@@ -49,8 +59,6 @@ func performFileAction(hash string, contents []byte) {
 	}
 	log.Println("finished goroutine for sending file to kafka")
 }
-
-
 
 // exists returns whether the given file or directory exists or not
 func exists(path string) (bool, error) {
@@ -115,7 +123,6 @@ func fileupload(w http.ResponseWriter, r *http.Request) {
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		w.Write([]byte("405 - Method not allowed!"))
-
 	}
 }
 
@@ -125,12 +132,15 @@ func main() {
 	// log.Println(os.Getenv("PATH"))
 
 	// TODO: fix issue with permissions (possible cause umask?)
-	//os.MkdirAll("tmp", 0666)
-	//if res, err := exists("tmp") ; res == false || err != nil {
-	//	syscall.Umask(0666)
-	//	dirErr := os.Mkdir("tmp", os.ModeDir)
-	//	if dirErr != nil { log.Println(dirErr) }
-	//}
+	// os.MkdirAll("tmp", 0666)
+	// if res, err := exists("tmp") ; res == false || err != nil {
+	// 	syscall.Umask(0666)
+	// 	dirErr := os.Mkdir("tmp", os.ModeDir)
+	// 	if dirErr != nil { log.Println(dirErr) }
+	// }
+	path := prepareTempFolder()
+	fmt.Println(path)
+	// defer os.RemoveAll(path)
 
 	http.HandleFunc("/upload", fileupload)
 	err := http.ListenAndServe(":8080", nil)
