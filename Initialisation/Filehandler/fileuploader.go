@@ -8,10 +8,12 @@ import (
 				"crypto/md5"
 				"encoding/hex"
 				"os"
+				"os/exec"
 
 				"github.com/optiopay/kafka"
-				"github.com/optiopay/kafka/proto"
 				)
+
+				// "github.com/optiopay/kafka/proto"
 
 const (
 			 topic 			= "test"
@@ -33,31 +35,52 @@ func kafkaBrokerSetup() *kafka.Broker {
 	return broker
 }
 
+// creates folder META in tempDir if not existing and returns the path
 func prepareTempFolder() string{
 	tmpDir := os.TempDir()
 	path 	 := tmpDir + "META"
-	// create Folder and error handling
-	err		 := os.Mkdir(path, os.ModePerm) // TODO: check if umask problem still exists in tmp folder
-	if err != nil {
-		log.Fatalf("MkdirAll failed %q: %s", path, err)
-	}
 
+	folder_exists, _ := exists(path)
+	if folder_exists == false {
+		// create Folder and error handling
+		err := os.Mkdir(path, os.ModePerm) // TODO: check if umask problem still exists in tmp folder
+		if err != nil {
+			log.Fatalf("MkdirAll failed %q: %s", path, err)
+		}
+	}
+	// return Path
 	return path
 }
 
-func performFileAction(hash string, contents []byte) {
+// performs compilation on file
+func performFileAction(hash string, contents []byte) error {
 	log.Println("started goroutine for sending file to kafka")
 
-	broker := kafkaBrokerSetup()
-	producer := broker.Producer(kafka.NewProducerConf())
+	ir_file := saveIRFile(hash, contents)
 
-	msg := &proto.Message{Value: contents}
+	app := "/usr/local/bin/compilation.py"
 
-	_, err := producer.Produce(topic, partition, msg)
+	cmd := exec.Command(app, ir_file)
+	stdout, err := cmd.Output()
+
 	if err != nil {
-		log.Fatalf("cannot produce message to %s:%d caused by: %s", topic, partition, err)
+		log.Fatalf("failed to execute command " + app + ": " + err.Error())
+		return err
 	}
-	log.Println("finished goroutine for sending file to kafka")
+
+	log.Printf(string(stdout))
+	return nil
+
+	// broker := kafkaBrokerSetup()
+	// producer := broker.Producer(kafka.NewProducerConf())
+	//
+	// msg := &proto.Message{Value: contents}
+	//
+	// _, err := producer.Produce(topic, partition, msg)
+	// if err != nil {
+	// 	log.Fatalf("cannot produce message to %s:%d caused by: %s", topic, partition, err)
+	// }
+	// log.Println("finished goroutine for sending file to kafka")
 }
 
 // exists returns whether the given file or directory exists or not
@@ -71,7 +94,7 @@ func exists(path string) (bool, error) {
 // saves content array to LLVM-IR file with given name (<name>.ll)
 func saveIRFile(name string, contents []byte) string {
 	// create file to contain contents with name (eg. hash)
-	filePath := name + ".ll" // "tmp/"  TODO: Change path to use folder if creation is done right
+	filePath := prepareTempFolder() + name + ".ll" // "tmp/"  TODO: Change path to use folder if creation is done right
 	f, err := os.Create(filePath)
 	if err != nil {
 		panic(err)

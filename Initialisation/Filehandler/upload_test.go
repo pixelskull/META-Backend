@@ -79,12 +79,18 @@ func TestBasicMD5Creation(t *testing.T) {
   }
 }
 
-func TestBasicFileHandling(t *testing.T) {
-  t.Error("not implemented yet...")
-}
-
 func TestBasicIRFileSaving(t *testing.T) {
-  t.Error("not implemented yet...")
+  content := "this is file content for testing purpose"
+  content_as_bytes := []byte(content)
+  hash := createMD5(content_as_bytes)
+
+  defer func() {
+        if r := recover(); r != nil {
+            t.Errorf("Panic while saving IR file")
+        }
+    }()
+
+  saveIRFile(hash, content_as_bytes)
 }
 
 func TestTempFolderPreparation(t *testing.T) {
@@ -101,6 +107,26 @@ func TestTempFolderPreparation(t *testing.T) {
   if err != nil {
     t.Errorf("Testfile is not writeable: " + err.Error())
   }
+}
 
+func TestFileAction(t *testing.T) {
+  path, err := os.Getwd()
+  if err != nil {
+    t.Errorf("couln't find current working directory")
+  }
 
+  test_ir := path + "/testfiles/test.ll"
+
+  bytes, err := ioutil.ReadFile(test_ir)
+  if err != nil {
+    t.Errorf("not able to read Testfile from" + test_ir + ": " + err.Error())
+  }
+
+  hash := createMD5(bytes)
+
+  err = performFileAction(hash, bytes)
+
+  if err != nil {
+    t.Error("failed to perform file action: " + err.Error())
+  }
 }
