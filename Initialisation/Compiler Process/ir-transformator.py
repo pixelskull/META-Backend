@@ -10,6 +10,26 @@ import time
 # Preparation code
 ####
 
+def prepareParser():
+    parser = argparse.ArgumentParser(description="""compilation.py takes an LLVM-IR file and compiles
+                                                     this one to executable code""")
+
+    parser.add_argument("IR_File",
+                        type=str,
+                        help="ir file to compile with compilation.py")
+
+    parser.add_argument("-v", "--verbose",
+                        help="increase output verbosity",
+                        action="store_true")
+    parser.add_argument("-o", "--output",
+                        help="define the output name used for storing file to disc",
+                        action="store",
+                        default="output.ll",
+                        dest="output_name")
+
+    return parser
+
+
 # prints basic usage for program
 def print_usage():
     print("usage: ir-transformator.py <FILENAME.ll>")
@@ -33,8 +53,8 @@ def read_file(path):
     return file_content
 
 # TODO implement method for creating new file
-def write_to_file(file_content):
-    output_path = os.path.join(os.getcwd(), "output.ll")
+def write_to_file(file_content, filename="output.ll"):
+    output_path = os.path.join(os.getcwd(), filename)
     file_object = open(output_path, 'w+')
     file_object.write(file_content)
     file_object.close()
@@ -57,52 +77,58 @@ def join_to_string(lines):
 ####
 
 # searches for target datalayout entry and replaces this one
-def replace_datalayout_entry(entry):
+def replace_datalayout_entry(entry, verbose=False):
     if "target datalayout =" in entry:
-        print("   > target datalayout found and replaced.")
+        if verbose:
+            print("   > target datalayout found and replaced.")
         return 'target datalayout = "e-m:o-i64:64-f80:128-n8:16:32:64-S128"'
     else:
         return entry
 
 
 # searches for target triple entry and replaces this one
-def replace_triple_entry(entry):
+def replace_triple_entry(entry, verbose=False):
     if "target triple =" in entry:
-        print("   > target triple found and replaced.")
+        if verbose:
+            print("   > target triple found and replaced.")
         return 'target triple = "x86_64-apple-macosx10.9"'
     else:
         return entry
 
 
 # searches for atributes #0 entry and replaces this one
-def replace_attribute0_entry(entry):
+def replace_attribute0_entry(entry, verbose=False):
     if "attributes #0 =" in entry:
-        print("   > attributes #0 found and replaced.")
+        if verbose:
+            print("   > attributes #0 found and replaced.")
         return 'attributes #0 = { "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "target-cpu"="core2" "target-features"="+ssse3,+cx16,+fxsr,+mmx,+sse,+sse2,+sse3" }'
     else:
         return entry
 
 
 # searches for atributes #2 entry and replaces this one
-def replace_attribute2_entry(entry):
+def replace_attribute2_entry(entry, verbose=False):
     if "attributes #2 =" in entry:
-        print("   > attributes #2 found and replaced.")
+        if verbose:
+            print("   > attributes #2 found and replaced.")
         return 'attributes #2 = { noinline "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "target-cpu"="core2" "target-features"="+ssse3,+cx16,+fxsr,+mmx,+sse,+sse2,+sse3" }'
     else:
         return entry
 
 # searches for atributes #3 entry and replaces this one
-def replace_attribute3_entry(entry):
+def replace_attribute3_entry(entry, verbose=False):
     if "attributes #3 =" in entry:
-        print("   > attributes #3 found and replaced.")
+        if verbose:
+            print("   > attributes #3 found and replaced.")
         return 'attributes #3 = { nounwind readnone "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "target-cpu"="core2" "target-features"="+ssse3,+cx16,+fxsr,+mmx,+sse,+sse2,+sse3" }'
     else:
         return entry
 
 # searches for atributes #6 entry and replaces this one
-def replace_attribute6_entry(entry):
+def replace_attribute6_entry(entry, verbose=False):
     if "attributes #6 =" in entry:
-        print("   > attributes #6 found and replaced.")
+        if verbose:
+            print("   > attributes #6 found and replaced.")
         return 'attributes #6 = { readonly "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "target-cpu"="core2" "target-features"="+ssse3,+cx16,+fxsr,+mmx,+sse,+sse2,+sse3" }'
     else:
         return entry
@@ -111,6 +137,10 @@ def replace_attribute6_entry(entry):
 # Main Method
 ####
 def main(argv):
+
+    parser = prepareParser()
+    args = parser.parse_args()
+
     # checking arguments otherwise print help message
     if len(argv) == 0:
         print("please give me the name of the file to convert...")
@@ -118,7 +148,8 @@ def main(argv):
         print("IR-Transformation aborted...")
         return
 
-    print("### Entering IR-Transformation")
+    if args.verbose:
+        print("### Entering IR-Transformation")
     start_time = time.time()
     # get the given path
     path = os.path.join(os.getcwd(), argv[1])
@@ -139,19 +170,20 @@ def main(argv):
     # apply transformations to IR
     tmp_lines = lines
     for transformation in transformations:
-        tmp_lines = list( map(transformation, tmp_lines) )
+        tmp_lines = list( map(lambda x: transformation(x, args.verbose), tmp_lines) )
 
 
     # joining List to new file content
     new_content = join_to_string(tmp_lines)
 
-    if write_to_file(new_content) == True:
-        print("-> safed modified file to disk (lookout for 'output.ll')")
-    else:
+    if write_to_file(new_content, args.output_name) == True and args.verbose:
+        print("-> safed modified file to disk (lookout for '" + args.output_name + "')")
+    elif args.verbose:
         print("-> the file was not written to disk, pile of crap...")
 
-    print("-> finished IR-transformation in: %s seconds" % (time.time() - start_time) )
-    print("### Leaving IR-transformation")
+    if args.verbose:
+        print("-> finished IR-transformation in: %s seconds" % (time.time() - start_time) )
+        print("### Leaving IR-transformation")
 
 
 
