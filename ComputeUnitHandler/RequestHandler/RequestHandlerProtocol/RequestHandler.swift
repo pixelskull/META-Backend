@@ -1,5 +1,5 @@
 //
-//  main.swift
+//  RequestHandler.swift
 //  ComputeUnitHandler
 //
 //  Created by Pascal Schönthier on 16.06.17.
@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol RequestHandler {
+    init()
+}
 
-
-
+extension RequestHandler {
+    init() { self.init() }
+}

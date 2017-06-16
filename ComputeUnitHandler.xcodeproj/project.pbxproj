@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		500969D21EF3E594004E2550 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500969D11EF3E594004E2550 /* main.swift */; };
+		500A3E351EF3E75C00B6BECC /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E341EF3E75C00B6BECC /* RequestHandler.swift */; };
+		500A3E391EF3E7BF00B6BECC /* BasicDistributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */; };
+		500A3E3C1EF3E7E600B6BECC /* ComputeUnitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,9 @@
 /* Begin PBXFileReference section */
 		500969CE1EF3E594004E2550 /* ComputeUnitHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputeUnitHandler; sourceTree = BUILT_PRODUCTS_DIR; };
 		500969D11EF3E594004E2550 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		500A3E341EF3E75C00B6BECC /* RequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestHandler.swift; sourceTree = "<group>"; };
+		500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicDistributor.swift; sourceTree = "<group>"; };
+		500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +63,60 @@
 		500969D01EF3E594004E2550 /* ComputeUnitHandler */ = {
 			isa = PBXGroup;
 			children = (
+				500A3E3A1EF3E7D100B6BECC /* DataSource */,
+				500A3E371EF3E79B00B6BECC /* Distributor */,
+				500A3E361EF3E78D00B6BECC /* RequestHandler */,
 				500969D11EF3E594004E2550 /* main.swift */,
 			);
 			path = ComputeUnitHandler;
+			sourceTree = "<group>";
+		};
+		500A3E361EF3E78D00B6BECC /* RequestHandler */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E3F1EF3E9A000B6BECC /* RequestHandlerProtocol */,
+			);
+			path = RequestHandler;
+			sourceTree = "<group>";
+		};
+		500A3E371EF3E79B00B6BECC /* Distributor */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E3E1EF3E8E200B6BECC /* DistributorProtocol */,
+			);
+			path = Distributor;
+			sourceTree = "<group>";
+		};
+		500A3E3A1EF3E7D100B6BECC /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E3D1EF3E8B500B6BECC /* DataSourceProtocol */,
+			);
+			path = DataSource;
+			sourceTree = "<group>";
+		};
+		500A3E3D1EF3E8B500B6BECC /* DataSourceProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */,
+			);
+			path = DataSourceProtocol;
+			sourceTree = "<group>";
+		};
+		500A3E3E1EF3E8E200B6BECC /* DistributorProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */,
+			);
+			path = DistributorProtocol;
+			sourceTree = "<group>";
+		};
+		500A3E3F1EF3E9A000B6BECC /* RequestHandlerProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E341EF3E75C00B6BECC /* RequestHandler.swift */,
+			);
+			path = RequestHandlerProtocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,7 +176,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				500A3E351EF3E75C00B6BECC /* RequestHandler.swift in Sources */,
 				500969D21EF3E594004E2550 /* main.swift in Sources */,
+				500A3E3C1EF3E7E600B6BECC /* ComputeUnitDataSource.swift in Sources */,
+				500A3E391EF3E7BF00B6BECC /* BasicDistributor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +325,7 @@
 				500969D71EF3E594004E2550 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
