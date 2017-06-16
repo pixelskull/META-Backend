@@ -12,6 +12,8 @@
 		500A3E391EF3E7BF00B6BECC /* BasicDistributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */; };
 		500A3E3C1EF3E7E600B6BECC /* ComputeUnitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */; };
 		500A3E411EF3F31300B6BECC /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E401EF3F31300B6BECC /* ComputeDataSource.swift */; };
+		500A3E431EF403C800B6BECC /* ComputeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E421EF403C800B6BECC /* ComputeUnit.swift */; };
+		500A3E471EF4047900B6BECC /* ComputeUnitDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E461EF4047900B6BECC /* ComputeUnitDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +35,8 @@
 		500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicDistributor.swift; sourceTree = "<group>"; };
 		500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDataSource.swift; sourceTree = "<group>"; };
 		500A3E401EF3F31300B6BECC /* ComputeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSource.swift; sourceTree = "<group>"; };
+		500A3E421EF403C800B6BECC /* ComputeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnit.swift; sourceTree = "<group>"; };
+		500A3E461EF4047900B6BECC /* ComputeUnitDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +69,8 @@
 		500969D01EF3E594004E2550 /* ComputeUnitHandler */ = {
 			isa = PBXGroup;
 			children = (
+				500A3E451EF4043300B6BECC /* ComputeUnitDelegate */,
+				500A3E441EF4042200B6BECC /* ComputeUnit */,
 				500A3E3A1EF3E7D100B6BECC /* DataSource */,
 				500A3E371EF3E79B00B6BECC /* Distributor */,
 				500A3E361EF3E78D00B6BECC /* RequestHandler */,
@@ -120,6 +126,30 @@
 				500A3E341EF3E75C00B6BECC /* RequestHandler.swift */,
 			);
 			path = RequestHandlerProtocol;
+			sourceTree = "<group>";
+		};
+		500A3E441EF4042200B6BECC /* ComputeUnit */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E421EF403C800B6BECC /* ComputeUnit.swift */,
+			);
+			path = ComputeUnit;
+			sourceTree = "<group>";
+		};
+		500A3E451EF4043300B6BECC /* ComputeUnitDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E481EF4048C00B6BECC /* ComputeUnitDelegateProtocol */,
+			);
+			path = ComputeUnitDelegate;
+			sourceTree = "<group>";
+		};
+		500A3E481EF4048C00B6BECC /* ComputeUnitDelegateProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				500A3E461EF4047900B6BECC /* ComputeUnitDelegate.swift */,
+			);
+			path = ComputeUnitDelegateProtocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -180,8 +210,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				500A3E351EF3E75C00B6BECC /* RequestHandler.swift in Sources */,
+				500A3E431EF403C800B6BECC /* ComputeUnit.swift in Sources */,
 				500A3E411EF3F31300B6BECC /* ComputeDataSource.swift in Sources */,
 				500969D21EF3E594004E2550 /* main.swift in Sources */,
+				500A3E471EF4047900B6BECC /* ComputeUnitDelegate.swift in Sources */,
 				500A3E3C1EF3E7E600B6BECC /* ComputeUnitDataSource.swift in Sources */,
 				500A3E391EF3E7BF00B6BECC /* BasicDistributor.swift in Sources */,
 			);
