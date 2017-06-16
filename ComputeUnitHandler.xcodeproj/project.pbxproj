@@ -11,6 +11,7 @@
 		500A3E351EF3E75C00B6BECC /* RequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E341EF3E75C00B6BECC /* RequestHandler.swift */; };
 		500A3E391EF3E7BF00B6BECC /* BasicDistributor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */; };
 		500A3E3C1EF3E7E600B6BECC /* ComputeUnitDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */; };
+		500A3E411EF3F31300B6BECC /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500A3E401EF3F31300B6BECC /* ComputeDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,7 @@
 		500A3E341EF3E75C00B6BECC /* RequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestHandler.swift; sourceTree = "<group>"; };
 		500A3E381EF3E7BF00B6BECC /* BasicDistributor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicDistributor.swift; sourceTree = "<group>"; };
 		500A3E3B1EF3E7E600B6BECC /* ComputeUnitDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDataSource.swift; sourceTree = "<group>"; };
+		500A3E401EF3F31300B6BECC /* ComputeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				500A3E3D1EF3E8B500B6BECC /* DataSourceProtocol */,
+				500A3E401EF3F31300B6BECC /* ComputeDataSource.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				500A3E351EF3E75C00B6BECC /* RequestHandler.swift in Sources */,
+				500A3E411EF3F31300B6BECC /* ComputeDataSource.swift in Sources */,
 				500969D21EF3E594004E2550 /* main.swift in Sources */,
 				500A3E3C1EF3E7E600B6BECC /* ComputeUnitDataSource.swift in Sources */,
 				500A3E391EF3E7BF00B6BECC /* BasicDistributor.swift in Sources */,
