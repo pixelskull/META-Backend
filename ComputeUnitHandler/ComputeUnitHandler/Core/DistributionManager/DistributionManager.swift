@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Dispatch
 
 protocol DistributionManageable {
     
@@ -33,6 +34,10 @@ struct DistributionManager:DistributionManageable {
     }
     
     func distribute() {
-        _ = computeUnit.compute(data: "foo") //TODO: add here data
+//        let queue = DispatchQueue(label: "ComputeUnitQueue", attributes: .concurrent)
+        let queue = DispatchQueue(label: "ComputeUnitQueue", qos: .userInitiated)
+        queue.async {
+            _ = self.computeUnit.compute(data: "foo") //TODO: add here real data
+        }
     }
 }
