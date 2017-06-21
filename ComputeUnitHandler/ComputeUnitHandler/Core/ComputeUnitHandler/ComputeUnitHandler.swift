@@ -1,12 +1,13 @@
 //
-//  main.swift
+//  ComputeUnitHandler.swift
 //  ComputeUnitHandler
 //
-//  Created by Pascal Schönthier on 16.06.17.
+//  Created by Pascal Schönthier on 19.06.17.
 //  Copyright © 2017 Pascal Schönthier. All rights reserved.
 //
 
 import Foundation
 
-//print("Hello, World!")
-
+protocol ComputeUnitHandler {
+    
+}

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		50507A661EF80199003B7BCF /* ComputeUnitHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A651EF80199003B7BCF /* ComputeUnitHandler.swift */; };
+		50507A691EF801EA003B7BCF /* DistributionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A681EF801EA003B7BCF /* DistributionManager.swift */; };
+		50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */; };
+		50507A6E1EF8026D003B7BCF /* ComputeUnitDataSourceDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6D1EF8026D003B7BCF /* ComputeUnitDataSourceDataSet.swift */; };
 		505BD2A11EF4191100FA4100 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BD2A01EF4191100FA4100 /* main.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +27,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		50507A651EF80199003B7BCF /* ComputeUnitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitHandler.swift; sourceTree = "<group>"; };
+		50507A681EF801EA003B7BCF /* DistributionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributionManager.swift; sourceTree = "<group>"; };
+		50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSource.swift; sourceTree = "<group>"; };
+		50507A6D1EF8026D003B7BCF /* ComputeUnitDataSourceDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDataSourceDataSet.swift; sourceTree = "<group>"; };
 		505BD29D1EF4191100FA4100 /* ComputeUnitHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputeUnitHandler; sourceTree = BUILT_PRODUCTS_DIR; };
 		505BD2A01EF4191100FA4100 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -38,6 +46,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		50507A631EF8016C003B7BCF /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				50507A6A1EF80209003B7BCF /* DataSource */,
+				50507A671EF801C5003B7BCF /* DistributionManager */,
+				50507A641EF8017B003B7BCF /* ComputeUnitHandler */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		50507A641EF8017B003B7BCF /* ComputeUnitHandler */ = {
+			isa = PBXGroup;
+			children = (
+				50507A651EF80199003B7BCF /* ComputeUnitHandler.swift */,
+			);
+			path = ComputeUnitHandler;
+			sourceTree = "<group>";
+		};
+		50507A671EF801C5003B7BCF /* DistributionManager */ = {
+			isa = PBXGroup;
+			children = (
+				50507A681EF801EA003B7BCF /* DistributionManager.swift */,
+			);
+			path = DistributionManager;
+			sourceTree = "<group>";
+		};
+		50507A6A1EF80209003B7BCF /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */,
+				50507A6D1EF8026D003B7BCF /* ComputeUnitDataSourceDataSet.swift */,
+			);
+			path = DataSource;
+			sourceTree = "<group>";
+		};
 		505BD2941EF4191100FA4100 = {
 			isa = PBXGroup;
 			children = (
@@ -57,6 +100,7 @@
 		505BD29F1EF4191100FA4100 /* ComputeUnitHandler */ = {
 			isa = PBXGroup;
 			children = (
+				50507A631EF8016C003B7BCF /* Core */,
 				505BD2A01EF4191100FA4100 /* main.swift */,
 			);
 			path = ComputeUnitHandler;
@@ -119,7 +163,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50507A661EF80199003B7BCF /* ComputeUnitHandler.swift in Sources */,
 				505BD2A11EF4191100FA4100 /* main.swift in Sources */,
+				50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */,
+				50507A6E1EF8026D003B7BCF /* ComputeUnitDataSourceDataSet.swift in Sources */,
+				50507A691EF801EA003B7BCF /* DistributionManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,6 +194,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -201,6 +251,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
@@ -265,6 +317,7 @@
 				505BD2A61EF4191100FA4100 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
