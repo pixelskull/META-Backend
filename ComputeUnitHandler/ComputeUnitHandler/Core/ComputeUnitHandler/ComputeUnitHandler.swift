@@ -8,6 +8,31 @@
 
 import Foundation
 
-protocol ComputeUnitHandler {
+protocol ComputeUnitHandling {
+    var data:[Any]! { get set }
+    
+    init()
+    init(data:[Any])
+    
+    func compute(withData data:[Any]) -> [Any]
+}
+
+struct ComputeUnitHandler: ComputeUnitHandling {
+    
+    var data:[Any]!
+    
+    init() {
+        data = [Any]()
+    }
+    
+    init(data: [Any]) {
+        self.init()
+        
+    }
+    
+    func compute(withData data: [Any]) -> [Any] {
+        return data //TODO: Implement this 
+    }
+    
     
 }

@@ -10,3 +10,21 @@ import Foundation
 
 //print("Hello, World!")
 
+let arguments = CommandLine.arguments
+
+func main(args:[String]) -> Int {
+    guard args.count > 1 else {
+        print("wrong usage of: " + args.first!)
+        return 1
+    }
+    
+    let handler = ComputeUnitHandler()
+    let results = handler.compute(withData: [String](args[1...args.count]))
+    
+    print("RESULTS:")
+    print(results)
+    
+    return 0
+}
+
+
