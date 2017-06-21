@@ -1,5 +1,5 @@
 //
-//  MetaComputeUnitDataSourceDataSet.swift
+//  MetaComputeDataSourceDataSet.swift
 //  ComputeUnitHandler
 //
 //  Created by Pascal Schönthier on 19.06.17.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ComputeUnitDataSourceDataSet {
+enum ComputeDataSourceDataSet {
     case Result
     case Data
 }
