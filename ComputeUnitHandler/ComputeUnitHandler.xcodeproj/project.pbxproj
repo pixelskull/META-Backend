@@ -12,6 +12,8 @@
 		50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */; };
 		50507A6E1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6D1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift */; };
 		505BD2A11EF4191100FA4100 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BD2A01EF4191100FA4100 /* main.swift */; };
+		50EE4EA71EFAAB5700BB754F /* ComputeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */; };
+		50EE4EAB1EFAABD500BB754F /* ComputeUnitDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +35,8 @@
 		50507A6D1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSourceDataSet.swift; sourceTree = "<group>"; };
 		505BD29D1EF4191100FA4100 /* ComputeUnitHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputeUnitHandler; sourceTree = BUILT_PRODUCTS_DIR; };
 		505BD2A01EF4191100FA4100 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnit.swift; sourceTree = "<group>"; };
+		50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,8 @@
 		50507A631EF8016C003B7BCF /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				50EE4EA91EFAABC400BB754F /* ComputeUnitDelegate */,
+				50EE4EA81EFAAB5D00BB754F /* ComputeUnit */,
 				50507A6A1EF80209003B7BCF /* DataSource */,
 				50507A671EF801C5003B7BCF /* DistributionManager */,
 				50507A641EF8017B003B7BCF /* ComputeUnitHandler */,
@@ -104,6 +110,22 @@
 				505BD2A01EF4191100FA4100 /* main.swift */,
 			);
 			path = ComputeUnitHandler;
+			sourceTree = "<group>";
+		};
+		50EE4EA81EFAAB5D00BB754F /* ComputeUnit */ = {
+			isa = PBXGroup;
+			children = (
+				50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */,
+			);
+			path = ComputeUnit;
+			sourceTree = "<group>";
+		};
+		50EE4EA91EFAABC400BB754F /* ComputeUnitDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */,
+			);
+			path = ComputeUnitDelegate;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,8 +186,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				50507A661EF80199003B7BCF /* ComputeUnitHandler.swift in Sources */,
+				50EE4EA71EFAAB5700BB754F /* ComputeUnit.swift in Sources */,
 				505BD2A11EF4191100FA4100 /* main.swift in Sources */,
 				50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */,
+				50EE4EAB1EFAABD500BB754F /* ComputeUnitDelegate.swift in Sources */,
 				50507A6E1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift in Sources */,
 				50507A691EF801EA003B7BCF /* DistributionManager.swift in Sources */,
 			);
