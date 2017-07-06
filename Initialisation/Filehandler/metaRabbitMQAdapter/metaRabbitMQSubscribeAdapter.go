@@ -27,7 +27,7 @@ func Subscribe(ch *amqp.Channel,
 
       go callback(msg)
 
-      log.Printf("[*] Waiting for messages. To exit press CTRL+C")
+      log.Printf("metaRabbitMQAdapter::: [*] Waiting for messages. To exit press CTRL+C")
 
       <- forever // wait forever or until goroutine finished (never happen)
 }
