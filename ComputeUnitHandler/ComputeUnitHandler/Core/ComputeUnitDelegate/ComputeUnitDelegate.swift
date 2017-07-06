@@ -31,11 +31,7 @@ struct ComputeUnitDelegate: ComputeUnitDelegatable {
     }
     
     func computeUnitCompletedResult(_ result: Any) {
-        
-    }
-    
-    func computeFailedProducingResults(element: Any, error: Error) {
-        
+        q
     }
     
 }
