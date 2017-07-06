@@ -31,7 +31,7 @@ struct ComputeUnitDelegate: ComputeUnitDelegatable {
     }
     
     func computeUnitCompletedResult(_ result: Any) {
-        q
+        
     }
     
 }
