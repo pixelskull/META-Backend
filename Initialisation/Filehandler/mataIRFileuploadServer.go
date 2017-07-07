@@ -1,6 +1,10 @@
 package main
 
 import ("./metaFilehandler"
+				"./metaRabbitMQAdapter"
+
+				"time"
+
 				"fmt"
 				"net/http"
 				"log"
@@ -8,7 +12,51 @@ import ("./metaFilehandler"
 				"crypto/md5"
 				"encoding/hex")
 
+// dummy function for checking integration TODO delete later on
+func dummyRabbitPulish() {
+	// setting up config stuff
+	conf := metaRabbitMQAdapter.NewConfig()
+	conf.Exchange		 	= "amq.direct"
+	conf.Queue 				= "testing-queue"
+	conf.Routing_key	= "testing"
 
+	fmt.Println("publish:: conf setup")
+	// setup connection and channel
+	conn := metaRabbitMQAdapter.CreateConnection(conf)
+	defer conn.Close()
+	ch := metaRabbitMQAdapter.CreateChannel(conn)
+	defer ch.Close()
+
+	fmt.Println("publish:: channel setup")
+
+	// publish some message
+	metaRabbitMQAdapter.Publish(ch, conf, "testing")
+
+	fmt.Println("publish:: message published")
+}
+
+func dummyRabbitSubscribe() {
+	// setting up config stuff
+	conf := metaRabbitMQAdapter.NewConfig()
+	conf.Exchange		 	= "amq.direct"
+	conf.Queue 				= "testing-queue"
+	conf.Routing_key	= "testing"
+	fmt.Println("subscribe:: conf setup")
+	// setup connection and channel
+	conn := metaRabbitMQAdapter.CreateConnection(conf)
+	defer conn.Close()
+	ch := metaRabbitMQAdapter.CreateChannel(conn)
+	defer ch.Close()
+
+	fmt.Println("subscribe:: channel setup")
+	callback := func (msg metaRabbitMQAdapter.RabbitDelivery) {
+		for d := range msg {
+			log.Printf("Received a message: %s", d.Body)
+		}
+	}
+
+	metaRabbitMQAdapter.Subscribe(ch, conf, callback)
+}
 
 // gets []byte and performs MD5 Hash (returns hash as string)
 func createMD5(contents []byte) string {
@@ -20,7 +68,7 @@ func createMD5(contents []byte) string {
 }
 
 // Handler Method for uploaded files
-func fileupload(w http.ResponseWriter, r *http.Request) {
+func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	switch r.Method {
 
@@ -58,11 +106,18 @@ func main() {
 	// 	dirErr := os.Mkdir("tmp", os.ModeDir)
 	// 	if dirErr != nil { log.Println(dirErr) }
 	// }
+	go dummyRabbitSubscribe()
+	time.Sleep(time.Second * 2)
+	for i := 0;i < 6;i++ {
+		dummyRabbitPulish()
+	}
+
+
 	path := metaFilehandler.PrepareTempFolder()
 	fmt.Println(path)
 	// defer os.RemoveAll(path)
 
-	http.HandleFunc("/upload", fileupload)
+	http.HandleFunc("/upload", fileuploadHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("Listen and server: ", err)

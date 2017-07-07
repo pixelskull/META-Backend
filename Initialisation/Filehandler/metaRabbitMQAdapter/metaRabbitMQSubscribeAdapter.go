@@ -4,21 +4,23 @@ import ("github.com/streadway/amqp"
 
         "log")
 
-type callbackFunc func (<-chan amqp.Delivery)
+type RabbitDelivery <-chan amqp.Delivery
+type callbackFunc func (RabbitDelivery)
+
+
+
 
 func Subscribe(ch *amqp.Channel,
-               exchange string,
-               queue string,
-               body string,
+               conf Config,
                callback callbackFunc) {
 
-      msg, err := ch.Consume(queue,       // queue name
-                             "",          // consumer
-                             true,        // auto acknolage
-                             false,       // exclusice
-                             false,       // no local
-                             false,       // no wait
-                             nil)         // arguments
+      msg, err := ch.Consume(conf.Queue,      // queue name
+                             "",              // consumer
+                             true,            // auto acknolage
+                             false,           // exclusice
+                             false,           // no local
+                             false,           // no wait
+                             nil)             // arguments
 
 
       failOnError(err, "metaRabbitMQAdapter::: Failed to register a consumer")

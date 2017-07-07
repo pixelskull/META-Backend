@@ -7,15 +7,15 @@ import ("github.com/streadway/amqp"
 
 
 type Config struct {
-    host string
-    port string
+    Host string
+    Port string
 
-    exchange string
-    queue string
-    routing_key string
+    Exchange string
+    Queue string
+    Routing_key string
 
-    user string
-    password string
+    User string
+    Password string
 }
 
 var RabbitConf Config
@@ -31,11 +31,10 @@ func failOnError(err error, msg string) {
 // creates an connection to RabbitMQ server with given name
 // handles error when occures
 func CreateConnection(conf Config) (*amqp.Connection) {
-    host := "amqp://" + conf.user + ":" + conf.password + "@" + conf.host + ":" + conf.port + "/"
+    host := "amqp://" + conf.User + ":" + conf.Password + "@" + conf.Host + ":" + conf.Port + "/"
 
-    conn, err := amqp.Dial(host) //TODO hier muss noch der richtige Host eingetragen werden
+    conn, err := amqp.Dial(host)
     failOnError(err, "metaRabbitMQAdapter::: Could not connect to RabbitMQ")
-    defer conn.Close()
 
     return conn
 }
@@ -45,7 +44,6 @@ func CreateConnection(conf Config) (*amqp.Connection) {
 func CreateChannel(conn *amqp.Connection) (*amqp.Channel) {
     ch, err := conn.Channel()
     failOnError(err, "metaRabbitMQAdapter::: Failed to open a channel")
-    defer ch.Close()
 
     return ch
 }
@@ -53,10 +51,10 @@ func CreateChannel(conn *amqp.Connection) (*amqp.Channel) {
 // creates a new Config with default vaules
 // please use for convinience and safty
 func NewConfig() Config {
-    conf := Config{host: "localhost",
-                   port:"5672",
-                   user: "guest",
-                   password: "guest"}
+    conf := Config{Host: "localhost",
+                   Port:"5672",
+                   User: "guest",
+                   Password: "guest"}
     return conf
 }
 

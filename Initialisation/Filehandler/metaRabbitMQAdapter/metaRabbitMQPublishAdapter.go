@@ -7,24 +7,22 @@ import ("github.com/streadway/amqp")
 // takes channel, exchange name, queue name and body
 // handles error when occures
 func Publish(ch *amqp.Channel,
-             exchange string,
-             queue string,
-             routing_key string,
+             conf Config,
              body string) {
 
-    q, err := ch.QueueDeclare(queue,     // queue name
-                              false,     // durable
-                              false,     // delete when used
-                              false,     // exclusive
-                              false,     // no wait
-                              nil)       // arguments
+    _, err := ch.QueueDeclare(conf.Queue,     // queue name
+                              false,          // durable
+                              false,          // delete when used
+                              false,          // exclusive
+                              false,          // no wait
+                              nil)            // arguments
 
     failOnError(err, "metaRabbitMQAdapter::: Failed to declare Queue")
 
-    err = ch.Publish(exchange,       // exchange name
-                     q.Name,         // routing key
-                     false,          // mandatory
-                     false,          // imediate
+    err = ch.Publish(conf.Exchange,             // exchange name
+                     conf.Routing_key,          // routing key
+                     false,                     // mandatory
+                     false,                     // imediate
                      amqp.Publishing {
                        ContentType: "text/plain",
                        Body:        []byte(body),
