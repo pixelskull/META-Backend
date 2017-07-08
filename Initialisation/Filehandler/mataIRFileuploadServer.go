@@ -52,10 +52,11 @@ func publishIRToMessageQueue(hash string, irFile string) {
 	}
 	log.Println("metaIRFileuploadServer:: publishing IR file with ID: " + hash)
 	// send over message queue
-	rabbitMQPulish("amq.direct", "testing-queue", "testing", string(jsonData))
+	rabbitMQPulish("meta.deployment",
+								 "meta.deployment.irhandling",
+								 "irhandling",
+								 string(jsonData))
 }
-
-
 
 
 // gets []byte and performs MD5 Hash (returns hash as string)
