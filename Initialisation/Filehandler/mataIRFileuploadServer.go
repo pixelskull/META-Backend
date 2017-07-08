@@ -3,8 +3,7 @@ package main
 import ("./metaFilehandler"
 				"./metaRabbitMQAdapter"
 
-				"time"
-
+				"encoding/json"
 				"fmt"
 				"net/http"
 				"log"
@@ -12,51 +11,52 @@ import ("./metaFilehandler"
 				"crypto/md5"
 				"encoding/hex")
 
-// dummy function for checking integration TODO delete later on
-func dummyRabbitPulish() {
+
+
+// function for publishing to rabbitMQ
+func rabbitMQPulish(exchange string,
+										queue string,
+										routing_key string,
+										msg string) {
 	// setting up config stuff
 	conf := metaRabbitMQAdapter.NewConfig()
-	conf.Exchange		 	= "amq.direct"
-	conf.Queue 				= "testing-queue"
-	conf.Routing_key	= "testing"
+	conf.Exchange		 	= exchange
+	conf.Queue 				= queue
+	conf.Routing_key	= routing_key
 
-	fmt.Println("publish:: conf setup")
+	log.Println("publish:: conf setup")
 	// setup connection and channel
 	conn := metaRabbitMQAdapter.CreateConnection(conf)
 	defer conn.Close()
 	ch := metaRabbitMQAdapter.CreateChannel(conn)
 	defer ch.Close()
 
-	fmt.Println("publish:: channel setup")
+	log.Println("publish:: channel setup")
 
 	// publish some message
-	metaRabbitMQAdapter.Publish(ch, conf, "testing")
+	metaRabbitMQAdapter.Publish(ch, conf, msg)
 
-	fmt.Println("publish:: message published")
+	log.Println("publish:: message published")
 }
 
-func dummyRabbitSubscribe() {
-	// setting up config stuff
-	conf := metaRabbitMQAdapter.NewConfig()
-	conf.Exchange		 	= "amq.direct"
-	conf.Queue 				= "testing-queue"
-	conf.Routing_key	= "testing"
-	fmt.Println("subscribe:: conf setup")
-	// setup connection and channel
-	conn := metaRabbitMQAdapter.CreateConnection(conf)
-	defer conn.Close()
-	ch := metaRabbitMQAdapter.CreateChannel(conn)
-	defer ch.Close()
 
-	fmt.Println("subscribe:: channel setup")
-	callback := func (msg metaRabbitMQAdapter.RabbitDelivery) {
-		for d := range msg {
-			log.Printf("Received a message: %s", d.Body)
-		}
+func publishIRToMessageQueue(hash string, irFile string) {
+	// create map (key = hash | value = irFile)
+	m := make(map[string]string)
+	m[hash] = irFile
+	// convert to json
+	jsonData, err := json.Marshal(m)
+	if err != nil {
+		log.Println("metaIRFileuploadServer:: could not create json " + err.Error())
+		recover()
 	}
-
-	metaRabbitMQAdapter.Subscribe(ch, conf, callback)
+	log.Println("metaIRFileuploadServer:: publishing IR file with ID: " + hash)
+	// send over message queue
+	rabbitMQPulish("amq.direct", "testing-queue", "testing", string(jsonData))
 }
+
+
+
 
 // gets []byte and performs MD5 Hash (returns hash as string)
 func createMD5(contents []byte) string {
@@ -66,6 +66,7 @@ func createMD5(contents []byte) string {
 	fmt.Println(hex.EncodeToString(sum))
 	return hex.EncodeToString(sum)
 }
+
 
 // Handler Method for uploaded files
 func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +85,9 @@ func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 		hash := createMD5(contents)
 
 		// perform file saving and triggers action to perform
-		go metaFilehandler.PerformFileAction(hash, contents)
+		// go metaFilehandler.PerformFileAction(hash, contents)
+
+		go publishIRToMessageQueue(hash, string(contents))
 
 		break
 
@@ -106,12 +109,6 @@ func main() {
 	// 	dirErr := os.Mkdir("tmp", os.ModeDir)
 	// 	if dirErr != nil { log.Println(dirErr) }
 	// }
-	go dummyRabbitSubscribe()
-	time.Sleep(time.Second * 2)
-	for i := 0;i < 6;i++ {
-		dummyRabbitPulish()
-	}
-
 
 	path := metaFilehandler.PrepareTempFolder()
 	fmt.Println(path)
