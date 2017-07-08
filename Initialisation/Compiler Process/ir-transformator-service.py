@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import json
 import logging
 import argparse
 
@@ -88,10 +89,10 @@ def subscriber():
     logging.info("connection to server established...")
     channel = connection.channel()
     logging.info("channel successfully created...")
-    channel.queue_declare(queue='meta.deployment.irtransformed')
+    channel.queue_declare(queue='meta.deployment.irhandled')
     logging.info("queue successfully declared...")
     channel.basic_consume(callback_subscriber,
-                          queue='meta.deployment.irtransformed',
+                          queue='meta.deployment.irhandled',
                           no_ack=False)
     logging.info("start consuming from queue...")
     channel.start_consuming()
@@ -101,28 +102,43 @@ def callback_subscriber(ch, method, properties, body):
     logging.info("### Entering IR-Transformation")
     start_time = time.time()
 
-    lines = parse_to_lines(file_content)
+    logging.debug("decoding json from message...")
+    json_data = json.loads(body)
+
+    logging.debug("recieved: ", json_data)
+    content = json_data["content"]
+
+    logging.debug("splitting content to lines...")
+    lines = parse_to_lines(content)
 
     # define transformations to IR
+    logging.debug("preparing transformations...")
     transformations = [replace_datalayout_entry, replace_triple_entry,
                        replace_attribute0_entry, replace_attribute2_entry,
                        replace_attribute3_entry, replace_attribute6_entry]
 
     # apply transformations to IR
+    logging.debug("applying transformations...")
     tmp_lines = lines
     for transformation in transformations:
         tmp_lines = list( map(lambda x: transformation(x), tmp_lines) )
 
 
     # joining List to new file content
+    logging.debug("joining lines to string...")
     new_content = join_to_string(tmp_lines)
 
-    publish(new_content)
+    logging.debug("alternating json to new content version...")
+    json_data["content"] = new_content
+
+    logging.debug("dumping json to string...")
+    json_string = json.dumps(json_data)
+
+    logging.info("starting publishing of new content...")
+    publish(json_string)
 
     logging.info("-> finished IR-transformation in: %s seconds" % (time.time() - start_time) )
     logging.info("### Leaving IR-transformation")
-
-
 
 
 ####
@@ -133,11 +149,16 @@ def callback_subscriber(ch, method, properties, body):
 def publish(message):
     try:
         connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        logging.info("connection to server established...")
         channel = connection.channel()
-        channel.queue_declare(queue='meta.deployment.irhandled')
+        logging.info("channel successfully created...")
+        channel.queue_declare(queue='meta.deployment.irtransformed')
+        logging.info("queue successfully declared...")
         channel.basic_publish(exchange='meta.deployment',
-                                routing_key='irhandled',
+                                routing_key='irtransformed',
                                 body=message)
+
+        logging.info("message successfully published...")
         connection.close()
     except:
         logging.error('could not publish message due to unexpected error')
