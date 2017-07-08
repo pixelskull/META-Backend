@@ -3,6 +3,7 @@ package main
 import ("./metaFilehandler"
 				"./metaRabbitMQAdapter"
 
+				"os"
 				"encoding/json"
 				"fmt"
 				"net/http"
@@ -11,18 +12,11 @@ import ("./metaFilehandler"
 				"crypto/md5"
 				"encoding/hex")
 
-
+var RabbitConf metaRabbitMQAdapter.Config
 
 // function for publishing to rabbitMQ
-func rabbitMQPulish(exchange string,
-										queue string,
-										routing_key string,
-										msg string) {
-	// setting up config stuff
-	conf := metaRabbitMQAdapter.NewConfig()
-	conf.Exchange		 	= exchange
-	conf.Queue 				= queue
-	conf.Routing_key	= routing_key
+func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
+									  msg string) {
 
 	log.Println("publish:: conf setup")
 	// setup connection and channel
@@ -52,9 +46,7 @@ func publishIRToMessageQueue(hash string, irFile string) {
 	}
 	log.Println("metaIRFileuploadServer:: publishing IR file with ID: " + hash)
 	// send over message queue
-	rabbitMQPulish("meta.deployment",
-								 "meta.deployment.irhandling",
-								 "irhandling",
+	rabbitMQPulish(RabbitConf,
 								 string(jsonData))
 }
 
@@ -66,6 +58,30 @@ func createMD5(contents []byte) string {
 	sum := hash.Sum(nil)
 	fmt.Println(hex.EncodeToString(sum))
 	return hex.EncodeToString(sum)
+}
+
+
+func loadRabbitMQConf() metaRabbitMQAdapter.Config {
+	// reading config file
+	file, err := os.Open("rabbitMQ_conf.json")
+	if err != nil {
+		log.Println("metaIRFileuploadServer:: could not load rabbitMQ_conf.json: " + err.Error())
+		recover()
+	}
+
+	// preparing JSON Decoder
+	dec := json.NewDecoder(file)
+	configuration := metaRabbitMQAdapter.Config{}
+
+	// decode JSON
+	err = dec.Decode(&configuration)
+	if err != nil {
+		log.Println("metaIRFileuploadServer:: could not decode rabbitMQ_conf.json: " + err.Error())
+		recover()
+	}
+
+	// return configuration struct
+	return configuration
 }
 
 
@@ -111,6 +127,10 @@ func main() {
 	// 	if dirErr != nil { log.Println(dirErr) }
 	// }
 
+
+	RabbitConf = loadRabbitMQConf()
+	// log.Println("metaIRFileuploadServer:: loading config: " + RabbitConf)
+
 	path := metaFilehandler.PrepareTempFolder()
 	fmt.Println(path)
 	// defer os.RemoveAll(path)
@@ -118,7 +138,7 @@ func main() {
 	http.HandleFunc("/upload", fileuploadHandler)
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
-		log.Fatal("Listen and server: ", err)
+		log.Fatal("Listen and server: ", err.Error())
 	}
 
 }

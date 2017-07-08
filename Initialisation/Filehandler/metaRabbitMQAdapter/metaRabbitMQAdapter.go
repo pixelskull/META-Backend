@@ -3,12 +3,13 @@ package metaRabbitMQAdapter
 import ("github.com/streadway/amqp"
 
         "log"
-        "fmt")
+        "fmt"
+        "strconv")
 
 
 type Config struct {
     Host string
-    Port string
+    Port int
 
     Exchange string
     Queue string
@@ -31,7 +32,8 @@ func failOnError(err error, msg string) {
 // creates an connection to RabbitMQ server with given name
 // handles error when occures
 func CreateConnection(conf Config) (*amqp.Connection) {
-    host := "amqp://" + conf.User + ":" + conf.Password + "@" + conf.Host + ":" + conf.Port + "/"
+    port_as_string := strconv.Itoa(conf.Port)
+    host := "amqp://" + conf.User + ":" + conf.Password + "@" + conf.Host + ":" + port_as_string + "/"
 
     conn, err := amqp.Dial(host)
     failOnError(err, "metaRabbitMQAdapter::: Could not connect to RabbitMQ")
@@ -52,7 +54,7 @@ func CreateChannel(conn *amqp.Connection) (*amqp.Channel) {
 // please use for convinience and safty
 func NewConfig() Config {
     conf := Config{Host: "localhost",
-                   Port:"5672",
+                   Port: 5672,
                    User: "guest",
                    Password: "guest"}
     return conf

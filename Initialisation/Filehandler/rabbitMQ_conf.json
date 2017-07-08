@@ -1,0 +1,11 @@
+{
+  "Host": "127.0.0.1",
+  "Port": 5672,
+
+  "Exchange": "meta.deployment",
+  "Queue": "meta.deployment.irhandled",
+  "Routing_key": "irhandled",
+
+  "User": "guest",
+  "Password": "guest"
+}}
