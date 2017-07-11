@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {},
+    "id": "http://example.com/example.json",
+    "properties": {
+        "api_key": {
+            "id": "/properties/api_key",
+            "type": "string"
+        },
+        "content": {
+            "id": "/properties/content",
+            "items": {},
+            "type": "array"
+        }
+    },
+    "type": "object"
+}
