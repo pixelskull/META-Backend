@@ -1,0 +1,11 @@
+{
+  "Host": "127.0.0.1",
+  "Port": 5672,
+
+  "Exchange": "meta.production",
+  "Queue": "meta.production.recieveddata",
+  "Routing_key": "recieveddata",
+
+  "User": "guest",
+  "Password": "guest"
+}}
