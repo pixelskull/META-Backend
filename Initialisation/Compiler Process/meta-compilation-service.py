@@ -66,6 +66,7 @@ def subscriber():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     logging.info("connection to server established...")
     channel = connection.channel()
+    channel.confirm_delivery()
     logging.info("channel successfully created...")
     channel.queue_declare(queue='meta.deployment.irtransformed')
     logging.info("queue successfully declared...")
@@ -77,6 +78,7 @@ def subscriber():
 
 
 def callback_subscriber(ch, method, properties, body):
+    ch.basic_ack(delivery_tag=method.delivery_tag)
     json_data = json.loads(body)
 
     filepath = compile(json_data["id"], json_data["content"])
@@ -85,6 +87,7 @@ def callback_subscriber(ch, method, properties, body):
     json_string = json.dumps(json_data)
 
     publish(json_string)
+
 
 ####
 # RabbitMQ publisher code

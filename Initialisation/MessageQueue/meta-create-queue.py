@@ -35,6 +35,7 @@ def subscriber():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     logging.info("connection to server established...")
     channel = connection.channel()
+    channel.confirm_delivery()
     logging.info("channel successfully created...")
     channel.queue_declare(queue=config['Read_queue'])
     logging.info("queue successfully declared...")
@@ -45,13 +46,16 @@ def subscriber():
     channel.start_consuming()
 
 
-def callback_subscriber(ch, method, properties, body): # TODO: check if working
+def callback_subscriber(ch, method, properties, body):
+    
+    ch.basic_ack(delivery_tag=method.delivery_tag)
     global config
     json_data = json.loads(body)
 
     connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
     logging.info("connection to server established...")
     channel = connection.channel()
+    channel.confirm_delivery()
     logging.info("channel successfully created...")
 
     queue_name = "meta.production." + json_data['id']
@@ -75,6 +79,7 @@ def callback_subscriber(ch, method, properties, body): # TODO: check if working
     publish(body)
 
 
+
 ####
 # RabbitMQ publisher code
 ####
@@ -83,7 +88,7 @@ def callback_subscriber(ch, method, properties, body): # TODO: check if working
 def publish(message):
     global config
     try:
-        connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
         logging.info("connection to server established...")
         channel = connection.channel()
         logging.info("channel successfully created...")

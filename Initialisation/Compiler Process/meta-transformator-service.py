@@ -88,6 +88,7 @@ def subscriber():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     logging.info("connection to server established...")
     channel = connection.channel()
+    channel.confirm_delivery()
     logging.info("channel successfully created...")
     channel.queue_declare(queue='meta.deployment.irhandled')
     logging.info("queue successfully declared...")
@@ -99,6 +100,8 @@ def subscriber():
 
 
 def callback_subscriber(ch, method, properties, body):
+    
+    ch.basic_ack(delivery_tag=method.delivery_tag)
     logging.info("### Entering IR-Transformation")
     start_time = time.time()
 
