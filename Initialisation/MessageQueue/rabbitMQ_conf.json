@@ -3,8 +3,10 @@
   "Port": 5672,
 
   "Exchange": "meta.deployment",
-  "Queue": "meta.deployment.irhandled",
-  "Routing_key": "irhandled",
+  "Read_queue": "meta.deployment.compiled",
+
+  "Write_queue": "meta.deployment.queued",
+  "Routing_key": "queued",
 
   "User": "guest",
   "Password": "guest"

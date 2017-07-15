@@ -64,7 +64,7 @@ func createMD5(contents []byte) string {
 
 func loadRabbitMQConf() metaRabbitMQAdapter.Config {
 	// reading config file
-	file, err := os.Open("rabbitMQ_conf.json")
+	file, err := os.Open("./rabbitMQ_conf.json")
 	if err != nil {
 		log.Println("metaIRFileuploadServer:: could not load rabbitMQ_conf.json: " + err.Error())
 		recover()
