@@ -71,14 +71,12 @@ def subscriber():
     channel.queue_declare(queue='meta.deployment.irtransformed')
     logging.info("queue successfully declared...")
     channel.basic_consume(callback_subscriber,
-                          queue='meta.deployment.irtransformed',
-                          no_ack=False)
+                          queue='meta.deployment.irtransformed')
     logging.info("start consuming from queue...")
     channel.start_consuming()
 
 
 def callback_subscriber(ch, method, properties, body):
-    ch.basic_ack(delivery_tag=method.delivery_tag)
     json_data = json.loads(body)
 
     filepath = compile(json_data["id"], json_data["content"])
@@ -87,6 +85,7 @@ def callback_subscriber(ch, method, properties, body):
     json_string = json.dumps(json_data)
 
     publish(json_string)
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 ####

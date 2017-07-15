@@ -93,15 +93,12 @@ def subscriber():
     channel.queue_declare(queue='meta.deployment.irhandled')
     logging.info("queue successfully declared...")
     channel.basic_consume(callback_subscriber,
-                          queue='meta.deployment.irhandled',
-                          no_ack=False)
+                          queue='meta.deployment.irhandled')
     logging.info("start consuming from queue...")
     channel.start_consuming()
 
 
 def callback_subscriber(ch, method, properties, body):
-    
-    ch.basic_ack(delivery_tag=method.delivery_tag)
     logging.info("### Entering IR-Transformation")
     start_time = time.time()
 
@@ -139,6 +136,7 @@ def callback_subscriber(ch, method, properties, body):
 
     logging.info("starting publishing of new content...")
     publish(json_string)
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
     logging.info("-> finished IR-transformation in: %s seconds" % (time.time() - start_time) )
     logging.info("### Leaving IR-transformation")
@@ -158,8 +156,8 @@ def publish(message):
         channel.queue_declare(queue='meta.deployment.irtransformed')
         logging.info("queue successfully declared...")
         channel.basic_publish(exchange='meta.deployment',
-                                routing_key='irtransformed',
-                                body=message)
+                              routing_key='irtransformed',
+                              body=message)
 
         logging.info("message successfully published...")
         connection.close()

@@ -40,15 +40,12 @@ def subscriber():
     channel.queue_declare(queue=config['Read_queue'])
     logging.info("queue successfully declared...")
     channel.basic_consume(callback_subscriber,
-                          queue=config['Read_queue'],
-                          no_ack=False)
+                          queue=config['Read_queue'])
     logging.info("start consuming from queue...")
     channel.start_consuming()
 
 
 def callback_subscriber(ch, method, properties, body):
-    
-    ch.basic_ack(delivery_tag=method.delivery_tag)
     global config
     json_data = json.loads(body)
 
@@ -77,6 +74,7 @@ def callback_subscriber(ch, method, properties, body):
     json_data['routing_key'] = json_data['id']
     # and publish
     publish(body)
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 
