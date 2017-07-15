@@ -39,6 +39,8 @@ def subscriber():
     logging.info("channel successfully created...")
     channel.queue_declare(queue=config['Read_queue'])
     logging.info("queue successfully declared...")
+    # tell rabbitMQ to not send more than one message to this worker
+    channel.basic_qos(prefetch_count=1)
     channel.basic_consume(callback_subscriber,
                           queue=config['Read_queue'])
     logging.info("start consuming from queue...")
