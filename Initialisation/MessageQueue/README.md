@@ -1,13 +1,14 @@
 
 ### Softwarepackages to install
 
-`pip install pyrabbit`
+`pip install pika`
 
 
 ### Config Format
 
 **rabbitMQ_conf.json**
 ```
+{
   Host -> Hostname or IP to RabbitMQ
   Port -> Port definition used by your RabbitMQ instance
 
@@ -19,4 +20,5 @@
 
   User -> RabbitMQ user name
   Password -> Password for given RabbitMQ user
+}
 ```

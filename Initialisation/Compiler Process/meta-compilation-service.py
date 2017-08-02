@@ -27,8 +27,6 @@ def compile(filename, ir_content):
 
     write_to_file(filename + ".ll", ir_content)
 
-    # TODO: save file with content
-
     # assambling IR code to bitcode
     bc_file = filename + ".bc"
     logging.info("-> transforming to LLVM-Bitcode...")
@@ -41,7 +39,9 @@ def compile(filename, ir_content):
 
     # compiling to executable
     logging.info("-> compiling object files to executable...")
-    os.system('swiftc -o ' + filename + ' ' + object_file)
+    os.system('swiftc -o ' + filename + ' ' + object_file)  # TODO: here --emit-module for getting swiftmodule
+
+    # TODO: add xcodebuild -framework <swiftmodule> for compiling project 
 
     logging.info("-> finished compilation chain!")
 
