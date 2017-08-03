@@ -9,8 +9,7 @@ import logging
 import subprocess
 
 import pika
-
-from shutil import copyfile
+import shutil
 
 
 config = {}

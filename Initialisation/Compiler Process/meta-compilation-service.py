@@ -6,6 +6,7 @@ import logging
 import tempfile
 
 import pika
+import shutil
 
 
 def write_to_file(filename="default.ll", file_content="NULL"):
@@ -15,7 +16,18 @@ def write_to_file(filename="default.ll", file_content="NULL"):
     file_object.close()
 
 
-def compile(filename, ir_content):
+def find_xcproject_file(rootdir):
+    result = ""
+    for root, _, files in os.walk(rootdir):
+        for f in files:
+            if f.endswith('.xcodeproj'):
+                result = f
+                break
+    return result
+
+
+
+def compile_file(filename, ir_content):
     logging.info("### Entering Compilation Process ###")
     logging.info(":::: ir_content -> " + ir_content)
 
@@ -38,8 +50,8 @@ def compile(filename, ir_content):
     os.system('llc -filetype=obj ' + bc_file)
 
     # compiling to executable
-    logging.info("-> compiling object files to executable...")
-    os.system('swiftc -o ' + filename + ' ' + object_file)  # TODO: here --emit-module for getting swiftmodule
+    # logging.info("-> compiling object files to executable...")
+    # os.system('swiftc -o ' + filename + ' ' + object_file)  # TODO: here --emit-module for getting swiftmodule
 
     # TODO: add xcodebuild -framework <swiftmodule> for compiling project
 
@@ -52,11 +64,31 @@ def compile(filename, ir_content):
     logging.info("-> removing bitcode file")
     os.system('rm ' + bc_file)
 
-    logging.info("-> removing object file")
-    os.system('rm ' + object_file)
+    # logging.info("-> removing object file")
+    # os.system('rm ' + object_file)
 
-    final_path = tempFolder + "/" + filename
-    return final_path
+    output_path = tempFolder + "/" + object_file
+    return output_path
+
+def compile_service(filpath):
+    # copy object file to project destination
+    project_path = "" # TODO: add path here (laod from config?)
+    output_path = "" # TODO: add path here (services ... ?) maybe temp folder?
+
+    # copy files to output_path (xc-project and object file)
+    shutil.copy2(project_path, output_path)
+    shutil.copy2(filepath, output_path + "/") # TODO: add right path here
+
+    # change cwd to output_path
+    os.chdir(output_path)
+    currend_wd = os.getcwd()
+    # finding the needed xcodeproj file
+    xcproj = find_xcproject_file(currend_wd)
+    # execute build command
+    os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + PFAD_ZU_O_FILE) #TODO add path to object file here
+
+    compiled_path = currend_wd + "build/Release/" #TODO add project name
+
 
 ####
 # RabbitMQ subscriber code
@@ -81,9 +113,10 @@ def subscriber():
 def callback_subscriber(ch, method, properties, body):
     json_data = json.loads(body)
 
-    filepath = compile(json_data["id"], json_data["content"])
+    object_path = compile_file(json_data["id"], json_data["content"])
+    service_path = compile_service(object_path)
 
-    json_data["content"] = filepath
+    json_data["content"] = service_path
     json_string = json.dumps(json_data)
 
     publish(json_string)
