@@ -41,7 +41,7 @@ def compile(filename, ir_content):
     logging.info("-> compiling object files to executable...")
     os.system('swiftc -o ' + filename + ' ' + object_file)  # TODO: here --emit-module for getting swiftmodule
 
-    # TODO: add xcodebuild -framework <swiftmodule> for compiling project 
+    # TODO: add xcodebuild -framework <swiftmodule> for compiling project
 
     logging.info("-> finished compilation chain!")
 

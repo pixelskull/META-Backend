@@ -1,13 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 import os
+import sys
+import time
 import json
-import pika
+import errno
 import logging
+import subprocess
+
+import pika
+
+from shutil import copyfile
 
 
 config = {}
+
 
 def loadConfig():
     exists = os.path.isfile('./rabbitMQ_conf.json')
@@ -25,10 +32,60 @@ def loadConfig():
         return False
 
 
+def create_dirs_if_needed(path):
+    if not os.path.exists(path)
+        try:
+            os.makedirs(path)
+        except OSError as e:
+            if e.errno != errno.EEXISTS:
+                logging.error("could not create folder: " + path + " due to error" + e)
+                raise
+
+
+def get_config(json):
+    config["Host"] = "127.0.0.1"
+    config["Port"] = 5672
+
+    # transfering json info
+    config["Exchange"] = json["exchange"]
+    config["Read_queue"] = json["queue_name"]
+
+    config["Write_queue"] = "" #TODO create naming scheme for write queue
+    config["Routing_key"] = "" #TODO create naming scheme for Routing_key
+
+    return config
+
+
+def get_config_as_json(json):
+    output = get_config(json)
+    return json.dumps(output)
+
+
+def deploy_service(ident, file_path, config):
+    basic_path = "~/services/"
+    # create_folder_if_needed(basic_path)
+    destination_path = basic_path + ident + "/"
+    create_dirs_if_needed(destination_path)
+
+    shutil.copy2(file_path, destination_path)
+
+    with open(service_name, 'w') as service_config:
+        service_config.write(config)
+
+    os.chdir(destination_path)
+    service_name = "" #TODO set service name
+    proc = subprocess.Popen([service_name], shell=True)
+
+    result_dict = {}
+    result_dict["service_location"] = service_location
+    result_dict["service_pid"] = proc.pid
+
+    return result_dict
+
+
 ####
 # RabbitMQ subscriber code
 ####
-
 def subscriber():
     global config
     logging.debug("-> try connection with config: " + json.dumps(config))
@@ -39,6 +96,7 @@ def subscriber():
     logging.info("channel successfully created...")
     channel.queue_declare(queue=config['Read_queue'])
     logging.info("queue successfully declared...")
+
     # tell rabbitMQ to not send more than one message to this worker
     channel.basic_qos(prefetch_count=1)
     channel.basic_consume(callback_subscriber,
@@ -48,46 +106,17 @@ def subscriber():
 
 
 def callback_subscriber(ch, method, properties, body):
-    global config
-    json_data = json.loads(body)
+    body_as_json = json.loads(body)
 
-    connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
-    logging.info("connection to server established...")
-    channel = connection.channel()
-    channel.confirm_delivery()
-    logging.info("channel successfully created...")
+    service_config = get_config_as_json(body_as_json)
 
-    queue_name = "meta.production." + json_data['id']
-    # declaring queue for new Service (md5 hash id)
-    channel.queue_declare(queue=queue_name)
-    logging.info("queue successfully declared...")
-    # bind new queue to production exchange with id as routing key
-    channel.queue_bind(exchange="meta.production",
-                       queue=queue_name,
-                       routing_key=json_data['id'])
-    logging.debug("bind queue " + queue_name + " to Exchange 'meta.production' with key " + json_data['id'])
-    # closing connectiin no longer needed
-    connection.close()
-    logging.info("closed connection to rabbitMQ instance...")
+    result_dict = deploy_service(body_as_json["id"], body_as_json["content"], service_config)
 
-    # add new information to message
-    json_data['queue_name']  = queue_name
-    json_data['exchange']    = "meta.production"
-    json_data['routing_key'] = json_data['id']
-
-    json_string = json.dumps(json_data)
-    # and publish
-    publish(json_string)
+    publisher(json.dumps(result_dict))
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-
-####
-# RabbitMQ publisher code
-####
-
-# publishes given message to queue
-def publish(message):
+def publisher(message):
     global config
     try:
         connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
@@ -106,15 +135,19 @@ def publish(message):
         logging.error('could not publish message due to unexpected error')
 
 
-def main():
-    logging.basicConfig(filename='meta-create-queue-service.log', level=logging.DEBUG)
+####
+# Main Method
+####
+def main(argv):
+    logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG)
     # loading given Config file (./RabbitMQ_conf.json)
     if not loadConfig():
         return
-    # starting subscriber
+
+    logging.info("starting subscriber...")
     subscriber()
 
 
 # starting main method
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
