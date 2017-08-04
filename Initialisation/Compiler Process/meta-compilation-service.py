@@ -115,7 +115,7 @@ def callback_subscriber(ch, method, properties, body):
     json_data = json.loads(body)
 
     object_path = compile_file(json_data["id"], json_data["content"])
-    service_path = compile_service(object_path)
+    service_path = compile_service(object_path, json_data["id"])
 
     json_data["content"] = service_path
     json_string = json.dumps(json_data)
