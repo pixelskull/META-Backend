@@ -41,7 +41,7 @@ def replace_datalayout_entry(entry):
 def replace_triple_entry(entry):
     if "target triple =" in entry:
         logging.info("   > target triple found and replaced.")
-        return 'target triple = "x86_64-apple-macosx10.9"'
+        return 'target triple = "x86_64-apple-macosx10.12"'
     else:
         return entry
 

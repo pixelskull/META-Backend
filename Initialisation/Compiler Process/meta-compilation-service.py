@@ -28,7 +28,7 @@ def find_xcproject_file(rootdir):
 
 
 def compile_file(filename, ir_content):
-    logging.info("### Entering Compilation Process ###")
+    logging.info("### Entering Object file Compilation Phase ###")
     logging.info(":::: ir_content -> " + ir_content)
 
     # create an tempFolder for storing files
@@ -49,12 +49,6 @@ def compile_file(filename, ir_content):
     logging.info("-> compiling to linkable object file...")
     os.system('llc -filetype=obj ' + bc_file)
 
-    # compiling to executable
-    # logging.info("-> compiling object files to executable...")
-    # os.system('swiftc -o ' + filename + ' ' + object_file)  # TODO: here --emit-module for getting swiftmodule
-
-    # TODO: add xcodebuild -framework <swiftmodule> for compiling project
-
     logging.info("-> finished compilation chain!")
 
     # Removing temp files
@@ -64,30 +58,37 @@ def compile_file(filename, ir_content):
     logging.info("-> removing bitcode file")
     os.system('rm ' + bc_file)
 
-    # logging.info("-> removing object file")
-    # os.system('rm ' + object_file)
-
     output_path = tempFolder + "/" + object_file
+    logging.debug("-> object file was stored at: " + output_path)
     return output_path
 
-def compile_service(filpath):
+def compile_service(filpath, ident="service"):
+    logging.info("### Entering Project Compilation Phase ###")
     # copy object file to project destination
-    project_path = "" # TODO: add path here (laod from config?)
-    output_path = "" # TODO: add path here (services ... ?) maybe temp folder?
+    project_path = "~/.META/template/" # TODO: laod from config?
+    basic_output_path = "~/.META/services/" # TODO: load from config
 
+    output_path = basic_output_path + ident
     # copy files to output_path (xc-project and object file)
     shutil.copy2(project_path, output_path)
+    logging.info("-> copied project files from: " + project_path + " to path: " + output_path)
     shutil.copy2(filepath, output_path + "/") # TODO: add right path here
+    logging.info("-> copied object file from: " + filepath + " to path: " + output_path)
 
     # change cwd to output_path
     os.chdir(output_path)
+    logging.debug("changed cwd to: " + os.getcwd())
     currend_wd = os.getcwd()
     # finding the needed xcodeproj file
     xcproj = find_xcproject_file(currend_wd)
+    logging.info("-> found xcodeproj file: " + xcproj)
     # execute build command
     os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + PFAD_ZU_O_FILE) #TODO add path to object file here
+    logging.debug("-> building project via xcodebuild succeded")
 
     compiled_path = currend_wd + "build/Release/" #TODO add project name
+    logging.info("-> Compiled Service is located at: " + compiled_path)
+    return compiled_path
 
 
 ####
