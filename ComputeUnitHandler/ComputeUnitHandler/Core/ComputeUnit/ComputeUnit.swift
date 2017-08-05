@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ComputeUnitable {
+public protocol ComputeUnitable {
     
     var delegate: ComputeUnitDelegate! { get set }
     
@@ -33,11 +33,11 @@ struct ComputeUnit: ComputeUnitable {
         self.delegate = delegate
     }
     
-    func compute<T>(data: T) -> T {
+    public func compute<T>(data: T) -> T {
         return data
     }
     
-    func compute<T>(data: T, WithAction action: (T) -> T) -> T {
+    public func compute<T>(data: T, WithAction action: (T) -> T) -> T {
         return action(data)
     }
     

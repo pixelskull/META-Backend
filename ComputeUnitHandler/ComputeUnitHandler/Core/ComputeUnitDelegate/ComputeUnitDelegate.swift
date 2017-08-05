@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ComputeUnitDelegatable {
+public protocol ComputeUnitDelegatable {
     
     init()
     
@@ -22,15 +22,19 @@ protocol ComputeUnitDelegatable {
     
 }
 
-struct ComputeUnitDelegate: ComputeUnitDelegatable {
+public struct ComputeUnitDelegate: ComputeUnitDelegatable {
     
-    init() { self.init() }
+    public init() { self.init() }
     
-    func computeUnitUpdatedResults() {
+    public func computeUnitUpdatedResults() {
         
     }
     
-    func computeUnitCompletedResult(_ result: Any) {
+    public func computeUnitCompletedResult(_ result: Any) {
+        
+    }
+    
+    public func computeFailedProducingResults(element: Any, error: Error) {
         
     }
     

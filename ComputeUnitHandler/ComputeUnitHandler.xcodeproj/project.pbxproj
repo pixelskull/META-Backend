@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		501426621F351AA000993308 /* RabbitMQConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501426611F351AA000993308 /* RabbitMQConnection.swift */; };
 		50507A661EF80199003B7BCF /* ComputeUnitHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A651EF80199003B7BCF /* ComputeUnitHandler.swift */; };
 		50507A691EF801EA003B7BCF /* DistributionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A681EF801EA003B7BCF /* DistributionManager.swift */; };
 		50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */; };
@@ -29,6 +30,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		501426611F351AA000993308 /* RabbitMQConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RabbitMQConnection.swift; sourceTree = "<group>"; };
+		5014266A1F35FBD200993308 /* module.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = module.map; sourceTree = "<group>"; };
 		50507A651EF80199003B7BCF /* ComputeUnitHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitHandler.swift; sourceTree = "<group>"; };
 		50507A681EF801EA003B7BCF /* DistributionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributionManager.swift; sourceTree = "<group>"; };
 		50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSource.swift; sourceTree = "<group>"; };
@@ -50,6 +53,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		501426631F3522D300993308 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		501426691F35FBD200993308 /* librabbitmq */ = {
+			isa = PBXGroup;
+			children = (
+				5014266A1F35FBD200993308 /* module.map */,
+			);
+			path = librabbitmq;
+			sourceTree = "<group>";
+		};
 		50507A631EF8016C003B7BCF /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +111,7 @@
 			children = (
 				505BD29F1EF4191100FA4100 /* ComputeUnitHandler */,
 				505BD29E1EF4191100FA4100 /* Products */,
+				501426631F3522D300993308 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -107,6 +126,7 @@
 		505BD29F1EF4191100FA4100 /* ComputeUnitHandler */ = {
 			isa = PBXGroup;
 			children = (
+				501426691F35FBD200993308 /* librabbitmq */,
 				50507A631EF8016C003B7BCF /* Core */,
 				505BD2A01EF4191100FA4100 /* main.swift */,
 			);
@@ -116,6 +136,7 @@
 		50C9F79A1F06958200F0826B /* MessageQueue */ = {
 			isa = PBXGroup;
 			children = (
+				501426611F351AA000993308 /* RabbitMQConnection.swift */,
 			);
 			path = MessageQueue;
 			sourceTree = "<group>";
@@ -198,6 +219,7 @@
 				505BD2A11EF4191100FA4100 /* main.swift in Sources */,
 				50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */,
 				50EE4EAB1EFAABD500BB754F /* ComputeUnitDelegate.swift in Sources */,
+				501426621F351AA000993308 /* RabbitMQConnection.swift in Sources */,
 				50507A6E1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift in Sources */,
 				50507A691EF801EA003B7BCF /* DistributionManager.swift in Sources */,
 			);
@@ -315,8 +337,15 @@
 		505BD2A51EF4191100FA4100 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEVELOPMENT_TEAM = SYMB48J5LX;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/usr/local/Cellar/rabbitmq-c/0.8.0/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -324,8 +353,15 @@
 		505BD2A61EF4191100FA4100 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEVELOPMENT_TEAM = SYMB48J5LX;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/usr/local/Cellar/rabbitmq-c/0.8.0/lib",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

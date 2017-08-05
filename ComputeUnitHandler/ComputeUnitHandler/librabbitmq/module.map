@@ -1,0 +1,4 @@
+module librabbitmq [system] {
+    header "/usr/local/include/amqp.h"
+    export *
+}
