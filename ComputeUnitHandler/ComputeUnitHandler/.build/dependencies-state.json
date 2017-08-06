@@ -1,0 +1,1 @@
+{"object": {"dependencies": [{"basedOn": null, "name": "CRabbitMQ", "repositoryURL": "https://github.com/feinstruktur/CRabbitMQ", "state": {"checkoutState": {"branch": null, "revision": "6c908486a213cb7c67e2f841152bc1c11a3b6cf7", "version": "1.0.4"}, "name": "checkout"}, "subpath": "CRabbitMQ-6491344872779967884"}]}, "version": 1}
