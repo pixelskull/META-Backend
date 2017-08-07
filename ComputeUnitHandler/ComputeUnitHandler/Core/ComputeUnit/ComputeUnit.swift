@@ -7,39 +7,21 @@
 //
 
 import Foundation
-import RMQClient
 
 public protocol ComputeUnitable {
     
     var delegate: ComputeUnitDelegate! { get set }
     
-    init() 
-    init(delegate: ComputeUnitDelegate)
     
-    func compute<T>(data: T) -> T
-    func compute<T>(data:T, WithAction action: (T) -> T) -> T
+    func compute(data: Any) -> Any
 }
 
 struct ComputeUnit: ComputeUnitable {
     
     var delegate: ComputeUnitDelegate!
     
-    init() {
-        self.init()
-        self.delegate = ComputeUnitDelegate()
-    }
-    
-    init(delegate: ComputeUnitDelegate) {
-        self.init()
-        self.delegate = delegate
-    }
-    
-    public func compute<T>(data: T) -> T {
+    public func compute(data: Any) -> Any {
         return data
-    }
-    
-    public func compute<T>(data: T, WithAction action: (T) -> T) -> T {
-        return action(data)
     }
     
 }

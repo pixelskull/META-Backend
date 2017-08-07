@@ -12,6 +12,8 @@
 		50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */; };
 		50507A6E1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6D1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift */; };
 		505BD2A11EF4191100FA4100 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BD2A01EF4191100FA4100 /* main.swift */; };
+		50970B451F38BC6C0089A9B3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50970B441F38BC6C0089A9B3 /* Config.swift */; };
+		50A24A5C1F379A2300859EBD /* RabbitMQAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */; };
 		50EE4EA71EFAAB5700BB754F /* ComputeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */; };
 		50EE4EAB1EFAABD500BB754F /* ComputeUnitDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -19,8 +21,8 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		505BD29B1EF4191100FA4100 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = usr/share/man/man1;
+			buildActionMask = 8;
+			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
 			);
@@ -35,7 +37,8 @@
 		50507A6D1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSourceDataSet.swift; sourceTree = "<group>"; };
 		505BD29D1EF4191100FA4100 /* ComputeUnitHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputeUnitHandler; sourceTree = BUILT_PRODUCTS_DIR; };
 		505BD2A01EF4191100FA4100 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		50A24A511F378BAC00859EBD /* RMQClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RMQClient.framework; path = Carthage/Build/Mac/RMQClient.framework; sourceTree = "<group>"; };
+		50970B441F38BC6C0089A9B3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RabbitMQAdapter.swift; sourceTree = "<group>"; };
 		50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnit.swift; sourceTree = "<group>"; };
 		50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,7 +57,6 @@
 		501426631F3522D300993308 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				50A24A511F378BAC00859EBD /* RMQClient.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -62,6 +64,8 @@
 		50507A631EF8016C003B7BCF /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				50970B431F38BC620089A9B3 /* Config */,
+				50A24A5A1F379A0200859EBD /* MessageQueue */,
 				50EE4EA91EFAABC400BB754F /* ComputeUnitDelegate */,
 				50EE4EA81EFAAB5D00BB754F /* ComputeUnit */,
 				50507A6A1EF80209003B7BCF /* DataSource */,
@@ -122,6 +126,22 @@
 			path = ComputeUnitHandler;
 			sourceTree = "<group>";
 		};
+		50970B431F38BC620089A9B3 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				50970B441F38BC6C0089A9B3 /* Config.swift */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		50A24A5A1F379A0200859EBD /* MessageQueue */ = {
+			isa = PBXGroup;
+			children = (
+				50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */,
+			);
+			path = MessageQueue;
+			sourceTree = "<group>";
+		};
 		50EE4EA81EFAAB5D00BB754F /* ComputeUnit */ = {
 			isa = PBXGroup;
 			children = (
@@ -170,6 +190,7 @@
 				TargetAttributes = {
 					505BD29C1EF4191100FA4100 = {
 						CreatedOnToolsVersion = 9.0;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -197,7 +218,9 @@
 			files = (
 				50507A661EF80199003B7BCF /* ComputeUnitHandler.swift in Sources */,
 				50EE4EA71EFAAB5700BB754F /* ComputeUnit.swift in Sources */,
+				50970B451F38BC6C0089A9B3 /* Config.swift in Sources */,
 				505BD2A11EF4191100FA4100 /* main.swift in Sources */,
+				50A24A5C1F379A2300859EBD /* RabbitMQAdapter.swift in Sources */,
 				50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */,
 				50EE4EAB1EFAABD500BB754F /* ComputeUnitDelegate.swift in Sources */,
 				50507A6E1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift in Sources */,
@@ -318,17 +341,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEVELOPMENT_TEAM = SYMB48J5LX;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5U6MKQCTY9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				HEADER_SEARCH_PATHS = /usr/local/include;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/usr/local/Cellar/rabbitmq-c/0.8.0/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq";
 				SWIFT_VERSION = 4.0;
 			};
@@ -338,17 +366,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEVELOPMENT_TEAM = SYMB48J5LX;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5U6MKQCTY9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				HEADER_SEARCH_PATHS = /usr/local/include;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/usr/local/Cellar/rabbitmq-c/0.8.0/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq";
 				SWIFT_VERSION = 4.0;
 			};

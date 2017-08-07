@@ -9,7 +9,7 @@
 import Foundation
 
 
-protocol ComputeDataSource {
+protocol ComputeDataSourceable {
     
     var data:[Any] { get set }
     var results:[Any] { get set }
@@ -19,21 +19,27 @@ protocol ComputeDataSource {
     
     init()
     init(data: [Any])
+    init(json: Data)
     
     func hasNextElement() -> Bool
     func getNextElement() -> Any?
     
-    func hashNextResult() -> Bool
+    func hasNextResult() -> Bool
     func getNextResult() -> Any?
     
     func storeNextResult(_ result: Any)
     
 }
 
-extension ComputeDataSource {
+class ComputeDataSource: ComputeDataSourceable {
     
-    init() {
-        self.init()
+    var data:[Any]
+    var results:[Any]
+    
+    var dataSemaphore:DispatchSemaphore = DispatchSemaphore(value: 1)
+    var resultSemaphore:DispatchSemaphore = DispatchSemaphore(value: 1)
+    
+    required init() {
         data = [Any]()
         results = [Any]()
         
@@ -41,18 +47,35 @@ extension ComputeDataSource {
         resultSemaphore = DispatchSemaphore(value: 1)
     }
     
-    init(data:[Any]) {
+    required convenience init(data:[Any]) {
         self.init()
         
         self.data = data
+    }
+    
+    required convenience init(json: Data) {
+        self.init()
+        do {
+            let jsonDict = try JSONSerialization.jsonObject(with: json, options: []) as? [Int:Any]
+            guard jsonDict != nil else { return }
+            for (_, value) in jsonDict! {
+                data.append(value)
+            }
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
     }
     
     func hasNextElement() -> Bool {
         return data.first != nil
     }
     
-    mutating func getNextElement() -> Any? {
-        return data.removeFirst()
+    func getNextElement() -> Any? {
+        dataSemaphore.wait()
+        let firstElement = data.removeFirst()
+        dataSemaphore.signal()
+        return firstElement
     }
     
     
@@ -60,8 +83,17 @@ extension ComputeDataSource {
         return results.first != nil
     }
     
-    mutating func getNextResult() -> Any? {
-        return results.removeFirst()
+    func getNextResult() -> Any? {
+        resultSemaphore.wait()
+        let firstResult = results.removeFirst()
+        resultSemaphore.signal()
+        return firstResult
+    }
+    
+    func storeNextResult(_ result: Any) {
+        resultSemaphore.wait()
+        self.results.append(result)
+        resultSemaphore.signal()
     }
 }
 

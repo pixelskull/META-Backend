@@ -14,30 +14,40 @@ protocol DistributionManageable {
     var computeUnit:ComputeUnit { get }
     
     init()
-    init(unit:ComputeUnit)
+    init(unit:ComputeUnit, dataSource:ComputeDataSource)
     
     func distribute()
     
 }
 
 struct DistributionManager:DistributionManageable {
+
+    private var _computeUnit:ComputeUnit!
+    var computeUnit: ComputeUnit { get { return _computeUnit } }
     
-    private var _computeUnit:ComputeUnit
-    var computeUnit:ComputeUnit { get { return _computeUnit } }
+    private var _dataSource: ComputeDataSource!
+    var dataSource: ComputeDataSource { get {return _dataSource} }
     
     init() {
         _computeUnit = ComputeUnit()
+        _dataSource = ComputeDataSource()
     }
     
-    init(unit:ComputeUnit) {
+    init(unit:ComputeUnit,
+         dataSource:ComputeDataSource) {
         _computeUnit = unit
+        _dataSource = dataSource
     }
     
     func distribute() {
 //        let queue = DispatchQueue(label: "ComputeUnitQueue", attributes: .concurrent)
-        let queue = DispatchQueue(label: "ComputeUnitQueue", qos: .userInitiated)
-        queue.async {
-            _ = self.computeUnit.compute(data: "foo") //TODO: add here real data
+        dataSource.data.forEach { computeData in
+            let queue = DispatchQueue(label: "ComputeUnitQueue", qos: .userInitiated)
+            queue.async {
+                let result = self.computeUnit.compute(data: computeData) //TODO: add here real data
+                self.dataSource.storeNextResult(result)
+            }
         }
+        
     }
 }
