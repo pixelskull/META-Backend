@@ -21,6 +21,9 @@ protocol ComputeDataSourceable {
     init(data: [Any])
     init(json: Data)
     
+    func isEmpty() -> Bool
+    func appendData(_ json: Data)
+    
     func hasNextElement() -> Bool
     func getNextElement() -> Any?
     
@@ -39,6 +42,7 @@ class ComputeDataSource: ComputeDataSourceable {
     var dataSemaphore:DispatchSemaphore = DispatchSemaphore(value: 1)
     var resultSemaphore:DispatchSemaphore = DispatchSemaphore(value: 1)
     
+    
     required init() {
         data = [Any]()
         results = [Any]()
@@ -55,6 +59,10 @@ class ComputeDataSource: ComputeDataSourceable {
     
     required convenience init(json: Data) {
         self.init()
+        appendData(json)
+    }
+    
+    func appendData(_ json: Data) {
         do {
             let jsonDict = try JSONSerialization.jsonObject(with: json, options: []) as? [Int:Any]
             guard jsonDict != nil else { return }
@@ -65,6 +73,10 @@ class ComputeDataSource: ComputeDataSourceable {
             print(error.localizedDescription)
             return
         }
+    }
+    
+    func isEmpty() -> Bool {
+        return data.isEmpty
     }
     
     func hasNextElement() -> Bool {
