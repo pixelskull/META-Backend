@@ -22,4 +22,5 @@ struct RabbitMQConfig {
     var user: String = "guest"
     var password: String = "guest"
     
+    private init() {}
 }
