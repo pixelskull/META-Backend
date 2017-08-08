@@ -12,7 +12,6 @@ public protocol ComputeUnitable {
     
     var delegate: ComputeUnitDelegate! { get set }
     
-    
     func compute(data: Any) -> Any
 }
 
