@@ -38,7 +38,7 @@ func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
 }
 
 // wrapper for rabbitMQPulish (convinience)
-func publishJSONToMessageQueue(contents []byte) {
+func publishJSONToMessageQueueAndSubscribe(contents []byte, w http.ResponseWriter) {
   // decode json to get data
   jres := &JSONResponse{}
   err := json.Unmarshal([]byte(string(contents)), &jres)
@@ -53,6 +53,21 @@ func publishJSONToMessageQueue(contents []byte) {
   tempConfig.Queue = jres.Id
 
   rabbitMQPulish(tempConfig, string(contents))
+
+  // TODO: test this...
+  conn := metaRabbitMQAdapter.CreateConnection(RabbitConf)
+	ch := metaRabbitMQAdapter.CreateChannel(conn)
+
+  tempConfig.Queue = "" // TODO: add result queue here
+
+  callback := func(delivery metaRabbitMQAdapter.RabbitDelivery){
+    for d := range delivery {
+        w.Write(d.Body)
+    }
+
+  }
+
+  go metaRabbitMQAdapter.Subscribe(ch, tempConfig, callback)
 }
 
 // validates json and proves scheme for requests
@@ -91,9 +106,8 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
     }
 
 		// sending json to message-queue
-		go publishJSONToMessageQueue(contents)
+		go publishJSONToMessageQueueAndSubscribe(contents, w)
 
-    // TODO: listen to response here and answer with results
 		break
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
