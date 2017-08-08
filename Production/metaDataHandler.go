@@ -55,7 +55,7 @@ func validateJSON(json string) (bool, error) {
 }
 
 // Handler Method for uploaded files
-func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
+func dataUploadHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method)
 	switch r.Method {
 
@@ -117,8 +117,8 @@ func main() {
 	// fmt.Println(path)
 	// defer os.RemoveAll(path)
 
-	http.HandleFunc("/taskdata", fileuploadHandler)
-	err := http.ListenAndServe(":4242", nil)
+	http.HandleFunc("/", dataUploadHandler)
+	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		log.Fatal("Listen and server: ", err.Error())
 	}
