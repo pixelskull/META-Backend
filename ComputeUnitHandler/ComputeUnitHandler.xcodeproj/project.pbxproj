@@ -11,6 +11,7 @@
 		50507A691EF801EA003B7BCF /* DistributionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A681EF801EA003B7BCF /* DistributionManager.swift */; };
 		50507A6C1EF80214003B7BCF /* ComputeDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */; };
 		50507A6E1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50507A6D1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift */; };
+		5051A1B81F3900A7008776B2 /* RMQClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5051A1B71F3900A7008776B2 /* RMQClient.framework */; };
 		505BD2A11EF4191100FA4100 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BD2A01EF4191100FA4100 /* main.swift */; };
 		50970B451F38BC6C0089A9B3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50970B441F38BC6C0089A9B3 /* Config.swift */; };
 		50A24A5C1F379A2300859EBD /* RabbitMQAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */; };
@@ -35,6 +36,7 @@
 		50507A681EF801EA003B7BCF /* DistributionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DistributionManager.swift; sourceTree = "<group>"; };
 		50507A6B1EF80214003B7BCF /* ComputeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSource.swift; sourceTree = "<group>"; };
 		50507A6D1EF8026D003B7BCF /* ComputeDataSourceDataSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeDataSourceDataSet.swift; sourceTree = "<group>"; };
+		5051A1B71F3900A7008776B2 /* RMQClient.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RMQClient.framework; path = ../../../../../Library/Frameworks/RMQClient.framework; sourceTree = "<group>"; };
 		505BD29D1EF4191100FA4100 /* ComputeUnitHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputeUnitHandler; sourceTree = BUILT_PRODUCTS_DIR; };
 		505BD2A01EF4191100FA4100 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		50970B441F38BC6C0089A9B3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -48,6 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5051A1B81F3900A7008776B2 /* RMQClient.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +60,7 @@
 		501426631F3522D300993308 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5051A1B71F3900A7008776B2 /* RMQClient.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -346,7 +350,8 @@
 				DEVELOPMENT_TEAM = 5U6MKQCTY9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -371,7 +376,8 @@
 				DEVELOPMENT_TEAM = 5U6MKQCTY9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				HEADER_SEARCH_PATHS = /usr/local/include;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

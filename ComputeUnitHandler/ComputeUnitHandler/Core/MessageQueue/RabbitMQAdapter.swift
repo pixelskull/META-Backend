@@ -74,19 +74,26 @@ class RabbitMQAdapter {
         //TODO: (done by create Queue service? )
 //        channel.queueBind(readQueue, exchange: exchange, routingKey: routingKey)
         
+        
+        var dataSource: ComputeDataSource!
+        var manager: DistributionManager!
+        //TODO: use imported one here
+        let computeUnit = ComputeUnit()
+        
+        
         // listen to queue with callback function
         queue.subscribe( { (_ message:RMQMessage) -> Void in
-            let messageString = String(data: message.body, encoding: .utf8)
-            print(messageString ?? "empty")
             
-            let dataSource = ComputeDataSource(json: message.body)
+            if dataSource.isEmpty() {
+                manager.dataSource.appendData(message.body)
+            } else {
+                dataSource = ComputeDataSource(json: message.body)
+                manager = DistributionManager(unit: computeUnit, dataSource: dataSource)
+            }
             
-            //TODO: use imported one here
-            let computeUnit = ComputeUnit()
-            
-            let manager = DistributionManager(unit: computeUnit, dataSource: dataSource)
-            
-            manager.distribute()
+            if !manager.running {
+                manager.distribute()
+            }
         })
     }
     

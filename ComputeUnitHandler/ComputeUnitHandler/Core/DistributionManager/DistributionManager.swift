@@ -12,6 +12,9 @@ import Dispatch
 protocol DistributionManageable {
     
     var computeUnit:ComputeUnit { get }
+    var dataSource: ComputeDataSource { get }
+    
+    var running: Bool { get }
     
     init()
     init(unit:ComputeUnit, dataSource:ComputeDataSource)
@@ -20,7 +23,7 @@ protocol DistributionManageable {
     
 }
 
-struct DistributionManager:DistributionManageable {
+class DistributionManager:DistributionManageable {
 
     private var _computeUnit:ComputeUnit!
     var computeUnit: ComputeUnit { get { return _computeUnit } }
@@ -28,18 +31,24 @@ struct DistributionManager:DistributionManageable {
     private var _dataSource: ComputeDataSource!
     var dataSource: ComputeDataSource { get {return _dataSource} }
     
-    init() {
+    private var _running: Bool = false
+    var running: Bool { get { return _running } }
+    
+    
+    required init() {
         _computeUnit = ComputeUnit()
         _dataSource = ComputeDataSource()
     }
     
-    init(unit:ComputeUnit,
+    convenience required init(unit:ComputeUnit,
          dataSource:ComputeDataSource) {
+        self.init()
         _computeUnit = unit
         _dataSource = dataSource
     }
     
     func distribute() {
+        _running = true
 //        let queue = DispatchQueue(label: "ComputeUnitQueue", attributes: .concurrent)
         dataSource.data.forEach { computeData in
             let queue = DispatchQueue(label: "ComputeUnitQueue", qos: .userInitiated)
@@ -48,6 +57,5 @@ struct DistributionManager:DistributionManageable {
                 self.dataSource.storeNextResult(result)
             }
         }
-        
     }
 }
