@@ -11,6 +11,10 @@ import ("./metaRabbitMQAdapter"
 
         "github.com/xeipuuv/gojsonschema")
 
+type JSONResponse struct {
+    Id string `json:"id"`
+    Data interface{} `json:"data"` // generic typish?
+}
 
 var RabbitConf metaRabbitMQAdapter.Config
 
@@ -34,8 +38,21 @@ func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
 }
 
 // wrapper for rabbitMQPulish (convinience)
-func publishJSONToMessageQueue(json string) {
-  rabbitMQPulish(RabbitConf, json)
+func publishJSONToMessageQueue(contents []byte) {
+  // decode json to get data
+  jres := &JSONResponse{}
+  err := json.Unmarshal([]byte(string(contents)), &jres)
+
+  if err != nil {
+		log.Println("metaIRFileuploadServer:: could not create json " + err.Error())
+		recover()
+	}
+
+  // set temp Configuration to adress this queue
+  tempConfig := RabbitConf
+  tempConfig.Queue = jres.Id
+
+  rabbitMQPulish(tempConfig, string(contents))
 }
 
 // validates json and proves scheme for requests
@@ -54,10 +71,8 @@ func validateJSON(json string) (bool, error) {
 
 }
 
-// Handler Method for uploaded files
-func dataUploadHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Method)
-	switch r.Method {
+func handleRequest(w http.ResponseWriter, r *http.Request) {
+  switch r.Method {
 
 	case http.MethodPost:
 		log.Println("POST Called")
@@ -76,12 +91,21 @@ func dataUploadHandler(w http.ResponseWriter, r *http.Request) {
     }
 
 		// sending json to message-queue
-		go publishJSONToMessageQueue(string(contents))
+		go publishJSONToMessageQueue(contents)
+
+    // TODO: listen to response here and answer with results
 		break
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		w.Write([]byte("405 - Method not allowed!"))
 	}
+}
+
+// Handler Method for uploaded files
+func dataUploadHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.Method)
+  // handle Request in go Routine
+  go handleRequest(w, r)
 }
 
 
