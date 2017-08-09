@@ -131,7 +131,7 @@ def callback_subscriber(ch, method, properties, body):
     new_content = join_to_string(tmp_lines)
 
     logging.debug("alternating json to new content version...")
-    json_data["content"] = new_content
+    json_data["Content"] = new_content
 
     logging.debug("dumping json to string...")
     json_string = json.dumps(json_data)
