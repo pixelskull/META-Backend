@@ -137,7 +137,7 @@ func main() {
 	// defer os.RemoveAll(path)
 
 	http.HandleFunc("/upload", fileuploadHandler)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":80", nil)
 	if err != nil {
 		log.Fatal("Listen and server: ", err.Error())
 	}
