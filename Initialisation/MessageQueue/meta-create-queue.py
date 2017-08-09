@@ -88,6 +88,7 @@ def callback_subscriber(ch, method, properties, body):
     json_data['Result_queue_name']  = exchange + "." + result_queue_id
     json_data['Result_routing_key'] = result_queue_id
 
+    json_string = json.dumps(json_data)
     # and publish
     publish(json_string)
     ch.basic_ack(delivery_tag=method.delivery_tag)
