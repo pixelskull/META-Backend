@@ -72,21 +72,23 @@ def compile_service(filpath, ident="service"):
     # copy files to output_path (xc-project and object file)
     shutil.copy2(project_path, output_path)
     logging.info("-> copied project files from: " + project_path + " to path: " + output_path)
-    shutil.copy2(filepath, output_path + "/") # TODO: add right path here
-    logging.info("-> copied object file from: " + filepath + " to path: " + output_path)
+    shutil.copy2(filepath, output_path + "/ComputeUnitHandler/ComputeUnitHandler/")
+    logging.info("-> copied object file from: " + filepath +
+                 " to path: " + output_path + "/ComputeUnitHandler/ComputeUnitHandler/")
 
     # change cwd to output_path
-    os.chdir(output_path)
+    os.chdir(output_path + "/ComputeUnitHandler/")
     logging.debug("changed cwd to: " + os.getcwd())
     currend_wd = os.getcwd()
     # finding the needed xcodeproj file
     xcproj = find_xcproject_file(currend_wd)
     logging.info("-> found xcodeproj file: " + xcproj)
     # execute build command
-    os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + PFAD_ZU_O_FILE) #TODO add path to object file here
+    object_file_path =  output_path + "/ComputeUnitHandler/ComputeUnitHandler/ComputeUnit.o"
+    os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + object_file_path)
     logging.debug("-> building project via xcodebuild succeded")
 
-    compiled_path = currend_wd + "build/Release/" #TODO add project name
+    compiled_path = currend_wd + "build/Release/ComputeUnitHandler" #TODO add project name
     logging.info("-> Compiled Service is located at: " + compiled_path)
     return compiled_path
 
