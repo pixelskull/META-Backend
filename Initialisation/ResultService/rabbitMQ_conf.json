@@ -1,0 +1,10 @@
+{
+  "Host": "127.0.0.1",
+  "Port": 5672,
+
+  "Exchange": "meta.deployment",
+  "Read_queue": "meta.deployment.deployed",
+
+  "User": "guest",
+  "Password": "guest"
+}

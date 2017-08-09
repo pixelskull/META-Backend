@@ -6,6 +6,38 @@
 
 echo ""
 echo "################################################################"
+echo "change pwd to ./ResultService/"
+cd ./ResultService
+echo "removing logs: meta-create-queue-service.log and nohup.out"
+
+rm meta-create-queue-service.log nohup.out
+echo "starting: message queue deployment service..."
+
+nohup python ./meta-result-log-service.py &
+RES_PID=$!
+sleep .5
+echo "started with PID: $RES_PID"
+cd ..
+
+
+echo ""
+echo "################################################################"
+echo "change pwd to ./Deployment/"
+cd ./Deployment
+echo "removing logs: meta-deployment-service.log and nohup.out"
+
+rm meta-deployment-service.log nohup.out
+echo "starting: message queue deployment service..."
+
+nohup python ./meta-deployment-service.py &
+DP_PID=$!
+sleep .5
+echo "started with PID: $DP_PID"
+cd ..
+
+
+echo ""
+echo "################################################################"
 echo "change pwd to ./MessageQueue/"
 cd ./MessageQueue
 echo "removing logs: meta-create-queue-service.log and nohup.out"
@@ -72,5 +104,5 @@ echo ""
 echo "################################################################"
 echo "to clean up and stop the created processes use:"
 echo ""
-echo "  kill $MQ_PID $CS_PID $TR_PID $IR_PID"
+echo "  kill $MQ_PID $CS_PID $TR_PID $IR_PID $RES_PID $DP_PID"
 echo ""
