@@ -32,7 +32,7 @@ def loadConfig():
 
 
 def create_dirs_if_needed(path):
-    if not os.path.exists(path)
+    if not os.path.exists(path):
         try:
             os.makedirs(path)
         except OSError as e:
@@ -46,11 +46,12 @@ def get_config(json):
     config["Port"] = 5672
 
     # transfering json info
-    config["Exchange"] = json["exchange"]
-    config["Read_queue"] = json["queue_name"]
+    config["Exchange"] = json["Exchange"]
+    config["Read_queue"] = json["Work_queue_name"]
+    config["Read_routing_key"] = json["Work_routing_key"]
 
-    config["Write_queue"] = "" #TODO create naming scheme for write queue
-    config["Routing_key"] = "" #TODO create naming scheme for Routing_key
+    config["Write_queue"] = json["Result_queue_name"]
+    config["Write_Routing_key"] = json["Result_routing_key"]
 
     return config
 
@@ -61,7 +62,7 @@ def get_config_as_json(json):
 
 
 def deploy_service(ident, file_path, config):
-    basic_path = "~/services/"
+    basic_path = "~/.META/services/"
     # create_folder_if_needed(basic_path)
     destination_path = basic_path + ident + "/"
     create_dirs_if_needed(destination_path)
@@ -72,12 +73,12 @@ def deploy_service(ident, file_path, config):
         service_config.write(config)
 
     os.chdir(destination_path)
-    service_name = "" #TODO set service name
+    service_name = "ComputeUnitHandler"
     proc = subprocess.Popen([service_name], shell=True)
 
     result_dict = {}
-    result_dict["service_location"] = service_location
-    result_dict["service_pid"] = proc.pid
+    result_dict["Service_location"] = service_location
+    result_dict["Service_pid"] = proc.pid
 
     return result_dict
 
@@ -88,7 +89,7 @@ def deploy_service(ident, file_path, config):
 def subscriber():
     global config
     logging.debug("-> try connection with config: " + json.dumps(config))
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
     logging.info("connection to server established...")
     channel = connection.channel()
     channel.confirm_delivery()
@@ -109,7 +110,7 @@ def callback_subscriber(ch, method, properties, body):
 
     service_config = get_config_as_json(body_as_json)
 
-    result_dict = deploy_service(body_as_json["id"], body_as_json["content"], service_config)
+    result_dict = deploy_service(body_as_json["Id"], body_as_json["Content"], service_config)
 
     publisher(json.dumps(result_dict))
     ch.basic_ack(delivery_tag=method.delivery_tag)
