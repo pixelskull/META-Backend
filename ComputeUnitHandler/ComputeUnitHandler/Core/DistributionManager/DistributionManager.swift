@@ -8,6 +8,7 @@
 
 import Foundation
 import Dispatch
+import ComputeUnitModule
 
 protocol DistributionManageable {
     

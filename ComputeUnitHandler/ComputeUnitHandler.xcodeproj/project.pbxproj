@@ -15,7 +15,6 @@
 		505BD2A11EF4191100FA4100 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505BD2A01EF4191100FA4100 /* main.swift */; };
 		50970B451F38BC6C0089A9B3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50970B441F38BC6C0089A9B3 /* Config.swift */; };
 		50A24A5C1F379A2300859EBD /* RabbitMQAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */; };
-		50EE4EA71EFAAB5700BB754F /* ComputeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */; };
 		50EE4EAB1EFAABD500BB754F /* ComputeUnitDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +40,8 @@
 		505BD2A01EF4191100FA4100 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		50970B441F38BC6C0089A9B3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RabbitMQAdapter.swift; sourceTree = "<group>"; };
-		50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnit.swift; sourceTree = "<group>"; };
+		50AD82441F3B5D92007AFDA5 /* ComputeUnitModule.swiftdoc */ = {isa = PBXFileReference; lastKnownFileType = file; path = ComputeUnitModule.swiftdoc; sourceTree = "<group>"; };
+		50AD82451F3B5D92007AFDA5 /* ComputeUnitModule.swiftmodule */ = {isa = PBXFileReference; lastKnownFileType = file; path = ComputeUnitModule.swiftmodule; sourceTree = "<group>"; };
 		50EE4EAA1EFAABD500BB754F /* ComputeUnitDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputeUnitDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,7 +71,6 @@
 				50970B431F38BC620089A9B3 /* Config */,
 				50A24A5A1F379A0200859EBD /* MessageQueue */,
 				50EE4EA91EFAABC400BB754F /* ComputeUnitDelegate */,
-				50EE4EA81EFAAB5D00BB754F /* ComputeUnit */,
 				50507A6A1EF80209003B7BCF /* DataSource */,
 				50507A671EF801C5003B7BCF /* DistributionManager */,
 				50507A641EF8017B003B7BCF /* ComputeUnitHandler */,
@@ -124,6 +123,8 @@
 		505BD29F1EF4191100FA4100 /* ComputeUnitHandler */ = {
 			isa = PBXGroup;
 			children = (
+				50AD82441F3B5D92007AFDA5 /* ComputeUnitModule.swiftdoc */,
+				50AD82451F3B5D92007AFDA5 /* ComputeUnitModule.swiftmodule */,
 				50507A631EF8016C003B7BCF /* Core */,
 				505BD2A01EF4191100FA4100 /* main.swift */,
 			);
@@ -144,14 +145,6 @@
 				50A24A5B1F379A2300859EBD /* RabbitMQAdapter.swift */,
 			);
 			path = MessageQueue;
-			sourceTree = "<group>";
-		};
-		50EE4EA81EFAAB5D00BB754F /* ComputeUnit */ = {
-			isa = PBXGroup;
-			children = (
-				50EE4EA61EFAAB5700BB754F /* ComputeUnit.swift */,
-			);
-			path = ComputeUnit;
 			sourceTree = "<group>";
 		};
 		50EE4EA91EFAABC400BB754F /* ComputeUnitDelegate */ = {
@@ -221,7 +214,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				50507A661EF80199003B7BCF /* ComputeUnitHandler.swift in Sources */,
-				50EE4EA71EFAAB5700BB754F /* ComputeUnit.swift in Sources */,
 				50970B451F38BC6C0089A9B3 /* Config.swift in Sources */,
 				505BD2A11EF4191100FA4100 /* main.swift in Sources */,
 				50A24A5C1F379A2300859EBD /* RabbitMQAdapter.swift in Sources */,
@@ -353,16 +345,20 @@
 					/Library/Frameworks,
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(SOURCE_ROOT)/ComputeUnitHandler",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/usr/local/Cellar/rabbitmq-c/0.8.0/lib",
+					"$(SOURCE_ROOT)/ComputeUnitHandler",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_LDFLAGS = "-lComputeUnitModule";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq $(SRCROOT)/ComputeUnitHandler/";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
@@ -379,16 +375,20 @@
 					/Library/Frameworks,
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					/usr/local/include,
+					"$(SOURCE_ROOT)/ComputeUnitHandler",
+				);
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/usr/local/Cellar/rabbitmq-c/0.8.0/lib",
+					"$(SOURCE_ROOT)/ComputeUnitHandler",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				OTHER_LDFLAGS = "-lComputeUnitModule";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/ComputeUnitHandler/librabbitmq $(SRCROOT)/ComputeUnitHandler/";
 				SWIFT_VERSION = 4.0;
 			};
 			name = Release;

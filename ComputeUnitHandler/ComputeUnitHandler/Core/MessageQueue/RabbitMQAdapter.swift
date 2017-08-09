@@ -9,7 +9,7 @@
 import Foundation
 import RMQClient
 
-//import ComputeUnit
+import ComputeUnitModule
 
 class RabbitMQAdapter {
     
