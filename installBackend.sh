@@ -6,27 +6,29 @@ if [ "$(whoami)" != "root" ]; then
 	exit 1
 fi
 
-# copy frameworks to /Library/frameworks
-echo ""
-echo "################################################################"
-echo "copying frameworks to /Library/Frameworks..."
-cp -R ./Misc/Frameworks/ /Library/Frameworks
-sleep .5
+THE_USER=${SUDO_USER:-${USERNAME:-unknown}}
 
 # create folder for software use
 echo ""
 echo "################################################################"
 echo "creating folder structure: ~/.META/"
-mkdir ~/.META/
+sudo -u ${THE_USER} mkdir ~/.META/
 echo "creating folder structure: ~/.META/template/"
-mkdir ~/.META/template/
+sudo -u ${THE_USER} mkdir ~/.META/template/
 echo "creating folder structure: ~/.META/services/"
-mkdir ~/.META/services/
+sudo -u ${THE_USER} mkdir ~/.META/services/
 sleep .5
 
 # copying template to template folder
 echo ""
 echo "################################################################"
 echo "copying ComputeUnitHandler template to ~/.META/template/"
-mkdir ~/.META/template/ComputeUnitHandler
-cp -R ./ComputeUnitHandler/ ~/.META/template/ComputeUnitHandler/
+sudo -u ${THE_USER} mkdir ~/.META/template/ComputeUnitHandler
+sudo -u ${THE_USER} cp -R ./ComputeUnitHandler/ ~/.META/template/ComputeUnitHandler/
+
+# copy frameworks to /Library/frameworks
+echo ""
+echo "################################################################"
+echo "copying frameworks to /Library/Frameworks..."
+cp -R -f ./Misc/Frameworks/* /Library/Frameworks
+sleep .5
