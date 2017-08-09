@@ -24,6 +24,30 @@ def loadConfig():
         logging.error("could not load \'rabbitMQ_conf.json\'")
         return False
 
+def createQueueWith(ident, suffix, host = "127.0.0.1", exchange = "meta.production"):
+
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host))
+    logging.info("connection to server established...")
+    channel = connection.channel()
+    channel.confirm_delivery()
+    logging.info("channel successfully created...")
+
+    queue_id = ident + "-" + suffix
+    full_queue_name = exchange + "." + queue_id
+    # declaring queue for new Service (md5 hash id)
+    channel.queue_declare(queue=full_queue_name)
+    logging.info("queue successfully declared...")
+    # bind new queue to production exchange with id as routing key
+    channel.queue_bind(exchange=exchange,
+                       queue=full_queue_name,
+                       routing_key=queue_id)
+    logging.debug("bind queue " + full_queue_name + " to Exchange " + exchange + " with key " + queue_id)
+    # closing connectiin no longer needed
+    connection.close()
+    logging.info("closed connection to rabbitMQ instance...")
+
+    return queue_id
+
 
 ####
 # RabbitMQ subscriber code
@@ -51,31 +75,19 @@ def callback_subscriber(ch, method, properties, body):
     global config
     json_data = json.loads(body)
 
-    connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
-    logging.info("connection to server established...")
-    channel = connection.channel()
-    channel.confirm_delivery()
-    logging.info("channel successfully created...")
-
-    queue_name = "meta.production." + json_data['id']
-    # declaring queue for new Service (md5 hash id)
-    channel.queue_declare(queue=queue_name)
-    logging.info("queue successfully declared...")
-    # bind new queue to production exchange with id as routing key
-    channel.queue_bind(exchange="meta.production",
-                       queue=queue_name,
-                       routing_key=json_data['id'])
-    logging.debug("bind queue " + queue_name + " to Exchange 'meta.production' with key " + json_data['id'])
-    # closing connectiin no longer needed
-    connection.close()
-    logging.info("closed connection to rabbitMQ instance...")
+    work_queue_id = createQueueWith(json_data["Id"], "-work", config["Host"])
+    result_queue_id = createQueueWith(json_data["Id"], "-result", config["Host"])
 
     # add new information to message
-    json_data['queue_name']  = queue_name
-    json_data['exchange']    = "meta.production"
-    json_data['routing_key'] = json_data['id']
+    exchange = "meta.production"
 
-    json_string = json.dumps(json_data)
+    json_data['Work_queue_name']    = exchange + "-" + work_queue_id
+    json_data['Exchange']           = exchange
+    json_data['Work_routing_key']   = work_queue_id
+
+    json_data['Result_queue_name']  = exchange + "-" + result_queue_id
+    json_data['Result_routing_key'] = result_queue_id
+
     # and publish
     publish(json_string)
     ch.basic_ack(delivery_tag=method.delivery_tag)
