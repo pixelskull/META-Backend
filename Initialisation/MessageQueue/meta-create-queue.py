@@ -81,11 +81,11 @@ def callback_subscriber(ch, method, properties, body):
     # add new information to message
     exchange = "meta.production"
 
-    json_data['Work_queue_name']    = exchange + "-" + work_queue_id
+    json_data['Work_queue_name']    = exchange + "." + work_queue_id
     json_data['Exchange']           = exchange
     json_data['Work_routing_key']   = work_queue_id
 
-    json_data['Result_queue_name']  = exchange + "-" + result_queue_id
+    json_data['Result_queue_name']  = exchange + "." + result_queue_id
     json_data['Result_routing_key'] = result_queue_id
 
     # and publish

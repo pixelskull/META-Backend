@@ -50,7 +50,7 @@ func publishJSONToMessageQueueAndSubscribe(contents []byte, w http.ResponseWrite
 
   // set temp Configuration to adress this queue
   tempConfig := RabbitConf
-  tempConfig.Queue = jres.Id
+  tempConfig.Queue = "meta.production." + jres.Id + "-work"
 
   rabbitMQPulish(tempConfig, string(contents))
 
@@ -58,13 +58,12 @@ func publishJSONToMessageQueueAndSubscribe(contents []byte, w http.ResponseWrite
   conn := metaRabbitMQAdapter.CreateConnection(RabbitConf)
 	ch := metaRabbitMQAdapter.CreateChannel(conn)
 
-  tempConfig.Queue = "" // TODO: add result queue here
+  tempConfig.Queue = + "meta.production." + jres.Id + "-result"
 
   callback := func(delivery metaRabbitMQAdapter.RabbitDelivery){
     for d := range delivery {
         w.Write(d.Body)
     }
-
   }
 
   go metaRabbitMQAdapter.Subscribe(ch, tempConfig, callback)
@@ -83,7 +82,6 @@ func validateJSON(json string) (bool, error) {
   } else {
     return false, err
   }
-
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
