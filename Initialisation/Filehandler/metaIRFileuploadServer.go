@@ -37,8 +37,8 @@ func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
 func publishIRToMessageQueue(hash string, irFile string) {
 	// create map (key = hash | value = irFile)
 	m := make(map[string]string)
-	m["id"] = hash
-	m["content"] = irFile
+	m["Id"] = hash
+	m["Content"] = irFile
 	// convert to json
 	jsonData, err := json.Marshal(m)
 	if err != nil {

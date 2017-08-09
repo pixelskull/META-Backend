@@ -61,7 +61,7 @@ echo "removing logs: nohup.out"
 rm nohub.out
 
 echo "starting: IR file handler service..."
-nohup go run ./metaIRFileuploadServer.go &
+nohup go run ./metaIRFileUploadServer.go &
 IR_PID=$!
 sleep .5
 echo "started with PID: $IR_PID"
