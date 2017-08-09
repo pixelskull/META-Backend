@@ -62,15 +62,18 @@ def compile_file(filename, ir_content):
     logging.debug("-> object file was stored at: " + output_path)
     return output_path
 
-def compile_service(filpath, ident="service"):
+def compile_service(filepath, ident="service"):
     logging.info("### Entering Project Compilation Phase ###")
     # copy object file to project destination
-    project_path = "~/.META/template/" # TODO: laod from config?
-    basic_output_path = "~/.META/services/" # TODO: load from config
+    home_path = os.path.expanduser("~")
+    project_path = home_path + "/.META/template/" # TODO: laod from config?
+    basic_output_path = home_path + "/.META/services/" # TODO: load from config
 
     output_path = basic_output_path + ident
     # copy files to output_path (xc-project and object file)
-    shutil.copy2(project_path, output_path)
+    if os.path.exists(output_path):
+        shutil.rmtree(output_path)
+    shutil.copytree(project_path, output_path)
     logging.info("-> copied project files from: " + project_path + " to path: " + output_path)
     shutil.copy2(filepath, output_path + "/ComputeUnitHandler/ComputeUnitHandler/")
     logging.info("-> copied object file from: " + filepath +
@@ -83,8 +86,14 @@ def compile_service(filpath, ident="service"):
     # finding the needed xcodeproj file
     xcproj = find_xcproject_file(currend_wd)
     logging.info("-> found xcodeproj file: " + xcproj)
+
+    # creating file paths
+    temp_file_path =  output_path + "/ComputeUnitHandler/ComputeUnitHandler/" + os.path.basename(filepath)
+    service_path = output_path + "/ComputeUnitHandler/ComputeUnitHandler/"
+    # renaming object file
+    object_file_path = service_path + "ComputeUnitModule.o"
+    os.rename(temp_file_path, service_path + "ComputeUnitModule.o")
     # execute build command
-    object_file_path =  output_path + "/ComputeUnitHandler/ComputeUnitHandler/ComputeUnit.o"
     os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + object_file_path)
     logging.debug("-> building project via xcodebuild succeded")
 

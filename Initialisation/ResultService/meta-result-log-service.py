@@ -53,7 +53,7 @@ def callback_subscriber(ch, method, properties, body):
 
 
 def main():
-    logging.basicConfig(filename='meta-create-queue-service.log', level=logging.DEBUG)
+    logging.basicConfig(filename='meta-result-log-service.log', level=logging.DEBUG)
     # loading given Config file (./RabbitMQ_conf.json)
     if not loadConfig():
         return
