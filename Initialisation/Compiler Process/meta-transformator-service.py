@@ -108,7 +108,7 @@ def callback_subscriber(ch, method, properties, body):
     json_data = json.loads(body)
 
     logging.debug("recieved: ", json_data)
-    content = json_data["content"]
+    content = json_data["Content"]
 
     logging.debug("splitting content to lines...")
     lines = parse_to_lines(content)
