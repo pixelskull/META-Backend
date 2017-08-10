@@ -56,13 +56,14 @@ def get_config(json):
     return config
 
 
-def get_config_as_json(json):
-    output = get_config(json)
+def get_config_as_json(json_data):
+    output = get_config(json_data)
     return json.dumps(output)
 
 
 def deploy_service(ident, file_path, config):
-    basic_path = "~/.META/services/"
+    home_path = os.path.expanduser("~")
+    basic_path = home_path + "/.META/services/"
     # create_folder_if_needed(basic_path)
     destination_path = basic_path + ident + "/"
     create_dirs_if_needed(destination_path)

@@ -67,13 +67,15 @@ def compile_service(filepath, ident="service"):
     # copy object file to project destination
     home_path = os.path.expanduser("~")
     project_path = home_path + "/.META/template/" # TODO: laod from config?
-    basic_output_path = home_path + "/.META/services/" # TODO: load from config
+    basic_output_path = home_path + "/.META/services/" # TODO: load from config?
 
     output_path = basic_output_path + ident
     # copy files to output_path (xc-project and object file)
     if os.path.exists(output_path):
         shutil.rmtree(output_path)
+
     shutil.copytree(project_path, output_path)
+
     logging.info("-> copied project files from: " + project_path + " to path: " + output_path)
     shutil.copy2(filepath, output_path + "/ComputeUnitHandler/ComputeUnitHandler/")
     logging.info("-> copied object file from: " + filepath +
@@ -97,7 +99,7 @@ def compile_service(filepath, ident="service"):
     os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + object_file_path)
     logging.debug("-> building project via xcodebuild succeded")
 
-    compiled_path = currend_wd + "build/Release/ComputeUnitHandler" #TODO add project name
+    compiled_path = currend_wd + "/build/Release/ComputeUnitHandler"
     logging.info("-> Compiled Service is located at: " + compiled_path)
     return compiled_path
 
