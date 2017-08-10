@@ -86,8 +86,8 @@ def compile_service(filepath, ident="service"):
     logging.debug("changed cwd to: " + os.getcwd())
     currend_wd = os.getcwd()
     # finding the needed xcodeproj file
-    xcproj = find_xcproject_file(currend_wd)
-    logging.info("-> found xcodeproj file: " + xcproj)
+    xcproj = "ComputeUnitHandler.xcodeproj"
+    logging.info("-> using xcodeproj file: " + xcproj)
 
     # creating file paths
     temp_file_path =  output_path + "/ComputeUnitHandler/ComputeUnitHandler/" + os.path.basename(filepath)
@@ -96,7 +96,7 @@ def compile_service(filepath, ident="service"):
     object_file_path = service_path + "ComputeUnitModule.o"
     os.rename(temp_file_path, service_path + "ComputeUnitModule.o")
     # execute build command
-    os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=" + object_file_path)
+    os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=\"" + object_file_path + "\"")
     logging.debug("-> building project via xcodebuild succeded")
 
     compiled_path = currend_wd + "/build/Release/ComputeUnitHandler"
