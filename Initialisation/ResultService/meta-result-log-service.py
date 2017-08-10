@@ -48,7 +48,7 @@ def subscriber():
 
 
 def callback_subscriber(ch, method, properties, body):
-    loggin.info("---> Recieved: " + body)
+    logging.info("---> Recieved: " + body)
 
 
 

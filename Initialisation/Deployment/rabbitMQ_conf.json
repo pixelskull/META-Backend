@@ -6,7 +6,7 @@
   "Read_queue": "meta.deployment.queued",
 
   "Write_queue": "meta.deployment.finished",
-  "Routing_key": "queued",
+  "Routing_key": "finished",
 
   "User": "guest",
   "Password": "guest"

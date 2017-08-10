@@ -3,7 +3,7 @@
   "Port": 5672,
 
   "Exchange": "meta.deployment",
-  "Read_queue": "meta.deployment.deployed",
+  "Read_queue": "meta.deployment.finished",
 
   "User": "guest",
   "Password": "guest"

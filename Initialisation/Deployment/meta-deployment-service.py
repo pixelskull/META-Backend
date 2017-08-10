@@ -42,18 +42,19 @@ def create_dirs_if_needed(path):
 
 
 def get_config(json):
-    config["Host"] = "127.0.0.1"
-    config["Port"] = 5672
+    service_config = {}
+    service_config["Host"] = "127.0.0.1"
+    service_config["Port"] = 5672
 
     # transfering json info
-    config["Exchange"] = json["Exchange"]
-    config["Read_queue"] = json["Work_queue_name"]
-    config["Read_routing_key"] = json["Work_routing_key"]
+    service_config["Exchange"] = json["Exchange"]
+    service_config["Read_queue"] = json["Work_queue_name"]
+    service_config["Read_routing_key"] = json["Work_routing_key"]
 
-    config["Write_queue"] = json["Result_queue_name"]
-    config["Write_Routing_key"] = json["Result_routing_key"]
+    service_config["Write_queue"] = json["Result_queue_name"]
+    service_config["Write_Routing_key"] = json["Result_routing_key"]
 
-    return config
+    return service_config
 
 
 def get_config_as_json(json_data):
@@ -62,23 +63,29 @@ def get_config_as_json(json_data):
 
 
 def deploy_service(ident, file_path, config):
-    home_path = os.path.expanduser("~")
-    basic_path = home_path + "/.META/services/"
+    basic_service_path = os.path.expanduser("~") + "/.META/services/"
+
     # create_folder_if_needed(basic_path)
-    destination_path = basic_path + ident + "/"
-    create_dirs_if_needed(destination_path)
+    # create_dirs_if_needed(destination_path)
 
-    shutil.copy2(file_path, destination_path)
+    # create deployment folder
+    destination_path = basic_service_path + ident + "/"
+    os.chdir(destination_path)
+    create_dirs_if_needed("./deployment")
 
-    with open(service_name, 'w') as service_config:
+    os.chdir("./deployment")
+
+    config_name = "config.json"
+    with open(config_name, 'w') as service_config:
         service_config.write(config)
 
-    os.chdir(destination_path)
-    service_name = "ComputeUnitHandler"
-    proc = subprocess.Popen([service_name], shell=True)
+    # copying service for stability and starting service
+    shutil.copy2(file_path, os.getcwd())
+    service_path = os.getcwd() + "/ComputeUnitHandler"
+    proc = subprocess.Popen([service_path], shell=True)
 
     result_dict = {}
-    result_dict["Service_location"] = service_location
+    result_dict["Service_location"] = service_path
     result_dict["Service_pid"] = proc.pid
 
     return result_dict
@@ -130,7 +137,7 @@ def publisher(message):
                                 routing_key=config['Routing_key'],
                                 body=message)
 
-        logging.info("message successfully published...")
+        logging.info("message successfully published: " + message + " " + config["Write_queue"] + " " + config["Exchange"] + " " + config["Routing_key"])
         connection.close()
     except:
         logging.error('could not publish message due to unexpected error')
