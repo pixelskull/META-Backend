@@ -75,8 +75,8 @@ def callback_subscriber(ch, method, properties, body):
     global config
     json_data = json.loads(body)
 
-    work_queue_id = createQueueWith(json_data["Id"], "-work", config["Host"])
-    result_queue_id = createQueueWith(json_data["Id"], "-result", config["Host"])
+    work_queue_id = createQueueWith(json_data["Id"], "work", config["Host"])
+    result_queue_id = createQueueWith(json_data["Id"], "result", config["Host"])
 
     # add new information to message
     exchange = "meta.production"
