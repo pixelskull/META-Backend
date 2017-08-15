@@ -11,20 +11,31 @@ import RMQClient
 
 import ComputeUnitModule
 
+
+/**
+ Adapter class for convenience connection to rabbitmq.
+ Uses the Obj-C RMQClient to connect to an configured
+ RabbitMQ server instance
+ */
 class RabbitMQAdapter {
-    
+    /// local host name copy from **Config**
     var host: String!
+    /// local port number copy from **Config**
     var port: Int!
-    
+    /// local queue for reading copy from **Config**
     var readQueue: String!
+    /// local exchange name copy from **Config**
     var exchange: String!
-    
+    /// local queue for writing copy from **Config**
     var writeQueue: String!
+    /// local routing key copy from **Config**
     var routingKey: String!
-    
+    /// local user name copy from **Config**
     var user: String!
+    /// local password copy from **Config**
     var password: String!
     
+    /// Initializer with default values, so that you didn't have to fill them all
     init(hostName: String = "127.0.0.1",
          portNumber: Int = 5672,
          readQueueName: String = "meta.production.test",
@@ -43,6 +54,7 @@ class RabbitMQAdapter {
         password = userPassword
     }
     
+    /// convenience initialisation for use with **Config** struct
     convenience init(config: RabbitMQConfig) {
         self.init(hostName: config.host,
                   portNumber: config.port,
@@ -54,6 +66,7 @@ class RabbitMQAdapter {
                   userPassword: config.password)
     }
     
+    //// helper method for creating rabbitmq channel
     private func getNewChannel() -> RMQChannel {
         // get connection to own machine
         let connection = RMQConnection(delegate: RMQConnectionDelegateLogger())
@@ -63,7 +76,7 @@ class RabbitMQAdapter {
         return connection.createChannel()
     }
     
-    
+    /// helper method for subscribing from readQueue
     func subscribe() {
         let channel = getNewChannel()
         print(channel)
@@ -73,7 +86,6 @@ class RabbitMQAdapter {
         // bind queue to exchange testing
         //TODO: (done by create Queue service? )
 //        channel.queueBind(readQueue, exchange: exchange, routingKey: routingKey)
-        
         
         var dataSource: ComputeDataSource!
         var manager: DistributionManager!
@@ -97,6 +109,7 @@ class RabbitMQAdapter {
         })
     }
     
+    /// helper method for publishing to **writeQueue**
     func publish(message: String) {
         // create connection
         let connection = RMQConnection(delegate: RMQConnectionDelegateLogger())

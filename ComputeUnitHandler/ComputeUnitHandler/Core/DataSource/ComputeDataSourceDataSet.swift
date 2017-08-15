@@ -8,6 +8,9 @@
 
 import Foundation
 
+/**
+ DataSetType for setting **Result** or **Value** of given data.
+ */
 enum ComputeDataSourceDataSet {
     case Result
     case Data

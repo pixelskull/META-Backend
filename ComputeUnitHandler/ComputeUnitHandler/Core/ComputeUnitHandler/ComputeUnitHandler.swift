@@ -8,12 +8,15 @@
 
 import Foundation
 
+/// protocol to implement an ComputeUnitHandler **legacy**
 protocol ComputeUnitHandling {
+    /// data to compute
     var data:[Any]! { get set }
     
     init()
     init(data:[Any])
     
+    /// computing given data
     func compute(withData data:[Any]) -> [Any]
 }
 

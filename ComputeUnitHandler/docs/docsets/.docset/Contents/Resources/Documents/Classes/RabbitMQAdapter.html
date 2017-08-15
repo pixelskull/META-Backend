@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>RabbitMQAdapter Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Class/RabbitMQAdapter" class="dashAnchor"></a>
+    <a title="RabbitMQAdapter Class Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (73% documented)</p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        RabbitMQAdapter Class Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Classes/ComputeDataSource.html">ComputeDataSource</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/DistributionManager.html">DistributionManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Classes/RabbitMQAdapter.html">RabbitMQAdapter</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:18ComputeUnitHandler7endTime10Foundation4DateVv">endTime</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:18ComputeUnitHandler1iSiv">i</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:18ComputeUnitHandler14signalReceiveds5Int32Vv">signalReceived</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Global Variables.html#/s:18ComputeUnitHandler9startTime10Foundation4DateVv">startTime</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Enums.html">Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ComputeDataSourceDataSet.html">ComputeDataSourceDataSet</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/ComputeDataSourceable.html">ComputeDataSourceable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ComputeUnitDelegatable.html">ComputeUnitDelegatable</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/ComputeUnitHandling.html">ComputeUnitHandling</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/DistributionManageable.html">DistributionManageable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Structs.html">Structs</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/ComputeUnitDelegate.html">ComputeUnitDelegate</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/ComputeUnitHandler.html">ComputeUnitHandler</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/RabbitMQConfig.html">RabbitMQConfig</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>RabbitMQAdapter</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">class</span> <span class="kt">RabbitMQAdapter</span></code></pre>
+
+                </div>
+              </div>
+            <p>Adapter class for convenience connection to rabbitmq.
+Uses the Obj-C RMQClient to connect to an configured
+RabbitMQ server instance</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC4hostSQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/host" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC4hostSQySSGv">host</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local host name copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">host</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC4portSQySiGv"></a>
+                    <a name="//apple_ref/swift/Property/port" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC4portSQySiGv">port</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local port number copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">port</span><span class="p">:</span> <span class="kt">Int</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC9readQueueSQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/readQueue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC9readQueueSQySSGv">readQueue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local queue for reading copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">readQueue</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC8exchangeSQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/exchange" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC8exchangeSQySSGv">exchange</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local exchange name copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">exchange</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC10writeQueueSQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/writeQueue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC10writeQueueSQySSGv">writeQueue</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local queue for writing copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">writeQueue</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC10routingKeySQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/routingKey" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC10routingKeySQySSGv">routingKey</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local routing key copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">routingKey</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC4userSQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/user" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC4userSQySSGv">user</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local user name copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">user</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC8passwordSQySSGv"></a>
+                    <a name="//apple_ref/swift/Property/password" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC8passwordSQySSGv">password</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>local password copy from <strong>Config</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="k">var</span> <span class="nv">password</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterCACSS8hostName_Si10portNumberSS09readQueueG0SS08exchangeG0SS05writekG0SS010routingKeyG0SS04userG0SS0P8Passwordtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(hostName:portNumber:readQueueName:exchangeName:writeQueueName:routingKeyName:userName:userPassword:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterCACSS8hostName_Si10portNumberSS09readQueueG0SS08exchangeG0SS05writekG0SS010routingKeyG0SS04userG0SS0P8Passwordtcfc">init(hostName:portNumber:readQueueName:exchangeName:writeQueueName:routingKeyName:userName:userPassword:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializer with default values, so that you didn&rsquo;t have to fill them all</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="nf">init</span><span class="p">(</span><span class="nv">hostName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"127.0.0.1"</span><span class="p">,</span>
+         <span class="nv">portNumber</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">5672</span><span class="p">,</span>
+         <span class="nv">readQueueName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"meta.production.test"</span><span class="p">,</span>
+         <span class="nv">exchangeName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"meta.production"</span><span class="p">,</span>
+         <span class="nv">writeQueueName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"meta.production.testfinished"</span><span class="p">,</span>
+         <span class="nv">routingKeyName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"testing"</span><span class="p">,</span>
+         <span class="nv">userName</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"guest"</span><span class="p">,</span>
+         <span class="nv">userPassword</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"guest"</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterCAcA0D8MQConfigV6config_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(config:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterCAcA0D8MQConfigV6config_tcfc">init(config:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>convenience initialisation for use with <strong>Config</strong> struct</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">config</span><span class="p">:</span> <span class="kt"><a href="../Structs/RabbitMQConfig.html">RabbitMQConfig</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC9subscribeyyF"></a>
+                    <a name="//apple_ref/swift/Method/subscribe()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC9subscribeyyF">subscribe()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>helper method for subscribing from readQueue</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">subscribe</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:18ComputeUnitHandler15RabbitMQAdapterC7publishySS7message_tF"></a>
+                    <a name="//apple_ref/swift/Method/publish(message:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:18ComputeUnitHandler15RabbitMQAdapterC7publishySS7message_tF">publish(message:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>helper method for publishing to <strong>writeQueue</strong></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">func</span> <span class="nf">publish</span><span class="p">(</span><span class="nv">message</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2017 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2017-08-16)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.8.3</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

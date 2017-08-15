@@ -8,28 +8,43 @@
 
 import Foundation
 
-
+/**
+ protocol for **ComputeDataSource** Implementations. Defines the needed
+ variables **data** and **result** as well as the need for semaphores
+ 
+ Also adds some must have funktions like **hasNextElement** and
+ **getNextElement** as well as their result counter parts.
+ */
 protocol ComputeDataSourceable {
-    
+    /// stores data objects (MetaComputeDataSet) with **id** for sequential
+    /// data usage and **value**.
     var data:[Any] { get set }
+    /// stores the result objects (MetaComputeDataSet) similary to **data**
     var results:[Any] { get set }
     
+    /// semaphore to protect read and writes from **data** array
     var dataSemaphore:DispatchSemaphore { get set }
+    /// semaphore to protect read and writes from **resluts** array
     var resultSemaphore:DispatchSemaphore { get set }
     
     init()
     init(data: [Any])
     init(json: Data)
     
+    /// functions for checking if any data is left in DataSource
     func isEmpty() -> Bool
+    /// function to append data directly from json object
     func appendData(_ json: Data)
-    
+    /// functions for checking if any data is left in DataSource
     func hasNextElement() -> Bool
+    /// gives you the first element of **data**
     func getNextElement() -> Any?
     
+    /// functions for checking if any result is left in DataSource
     func hasNextResult() -> Bool
+    /// gives you the first element of **results**
     func getNextResult() -> Any?
-    
+    /// function for storing an result in **results**
     func storeNextResult(_ result: Any)
     
 }
