@@ -52,13 +52,24 @@ class DistributionManager:DistributionManageable {
     
     func distribute() {
         _running = true
-//        let queue = DispatchQueue(label: "ComputeUnitQueue", attributes: .concurrent)
         dataSource.data.forEach { computeData in
             let queue = DispatchQueue(label: "ComputeUnitQueue", qos: .userInitiated)
             queue.async {
                 let result = self.computeUnit.compute(data: computeData) //TODO: add here real data
                 self.dataSource.storeNextResult(result)
+                self.finishedElement()
             }
         }
+    }
+    
+    private func finishedElement() {
+        //TODO: Implement better way of waiting
+        if dataSource.data.isEmpty {
+            RabbitMQAdapter().publish(message: NSKeyedArchiver.archivedData(withRootObject: dataSource.results))
+        }
+    }
+    
+    private func finished() {
+        RabbitMQAdapter().publish(message: NSKeyedArchiver.archivedData(withRootObject: dataSource.results))
     }
 }

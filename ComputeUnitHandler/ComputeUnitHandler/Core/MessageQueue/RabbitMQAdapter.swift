@@ -79,19 +79,12 @@ class RabbitMQAdapter {
     /// helper method for subscribing from readQueue
     func subscribe() {
         let channel = getNewChannel()
-        print(channel)
+        
         // create queue test
         let queue = channel.queue(readQueue)
-        print(queue)
-        // bind queue to exchange testing
-        //TODO: (done by create Queue service? )
-//        channel.queueBind(readQueue, exchange: exchange, routingKey: routingKey)
-        
         var dataSource: ComputeDataSource!
         var manager: DistributionManager!
-        //TODO: use imported one here
         let computeUnit = ComputeUnit()
-        
         
         // listen to queue with callback function
         queue.subscribe( { (_ message:RMQMessage) -> Void in
@@ -110,20 +103,16 @@ class RabbitMQAdapter {
     }
     
     /// helper method for publishing to **writeQueue**
-    func publish(message: String) {
+    func publish(message: Data) {
         // create connection
         let connection = RMQConnection(delegate: RMQConnectionDelegateLogger())
         connection.start()
         // create channel
         let channel = connection.createChannel()
-        // get queue
-//        let queue = channel.queue(writeQueue)
-        //TODO: allready done by create Queue service / configuration?
+        // get and greate queue if needed
         channel.queueBind(writeQueue, exchange: exchange, routingKey: routingKey)
         // sending message to exchange via routing key
-        channel.defaultExchange().publish(message.data(using: .utf8), routingKey: routingKey)
-        //TODO: get right exchange for publishing (meta.production.computed)
-        
+        channel.defaultExchange().publish(message, routingKey: routingKey)
         
         connection.close()
     }
