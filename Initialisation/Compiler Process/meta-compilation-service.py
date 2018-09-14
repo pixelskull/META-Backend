@@ -4,6 +4,7 @@ import os
 import json
 import logging
 import tempfile
+import subprocess
 
 import pika
 import shutil
@@ -42,21 +43,21 @@ def compile_file(filename, ir_content):
     # assambling IR code to bitcode
     bc_file = filename + ".bc"
     logging.info("-> transforming to LLVM-Bitcode...")
-    os.system('llvm-as ' + filename + '.ll')
+    subprocess.call(['llvm-as', filename + '.ll']) 
 
     # generating object file from bitcode via llc (low level compiler)
     object_file = filename + ".o"
     logging.info("-> compiling to linkable object file...")
-    os.system('llc -filetype=obj ' + bc_file)
+    subprocess.call(['llc', '-filetype=obj', bc_file])
 
     logging.info("-> finished compilation chain!")
 
     # Removing temp files
     logging.info("-> removing IR files")
-    os.system('rm ' + filename + '.ll')
+    subprocess.call(['rm', filename + '.ll'])
 
     logging.info("-> removing bitcode file")
-    os.system('rm ' + bc_file)
+    subprocess.call(['rm', bc_file])
 
     output_path = tempFolder + "/" + object_file
     logging.debug("-> object file was stored at: " + output_path)
@@ -96,7 +97,7 @@ def compile_service(filepath, ident="service"):
     object_file_path = service_path + "ComputeUnitModule.o"
     os.rename(temp_file_path, service_path + "ComputeUnitModule.o")
     # execute build command
-    os.system("xcodebuild -project " + xcproj + " OTHER_LDFLAGS=\"" + object_file_path + "\"")
+    subprocess.call(['xcodebuild', '-project', xcproj, 'OTHER_LDFLAGS=\"' + object_file_path + '\"'])
     logging.debug("-> building project via xcodebuild succeded")
 
     compiled_path = currend_wd + "/build/Release/ComputeUnitHandler"

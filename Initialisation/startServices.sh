@@ -29,7 +29,7 @@ echo "removing logs: meta-deployment-service.log and nohup.out"
 rm meta-deployment-service.log nohup.out
 echo "starting: message queue deployment service..."
 
-nohup python ./meta-deployment-service.py &
+nohup ./meta-deployment-service.py &
 DP_PID=$!
 sleep .5
 echo "started with PID: $DP_PID"
@@ -104,5 +104,5 @@ echo ""
 echo "################################################################"
 echo "to clean up and stop the created processes use:"
 echo ""
-echo "  kill $RES_PID $DP_PID $MQ_PID $CS_PID $TR_PID $IR_PID" 
+echo "  kill $RES_PID $DP_PID $MQ_PID $CS_PID $TR_PID $IR_PID"
 echo ""

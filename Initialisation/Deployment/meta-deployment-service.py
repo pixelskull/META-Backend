@@ -6,19 +6,21 @@ import time
 import json
 import errno
 import logging
-import subprocess
+import processStarter
 
 import pika
 import shutil
 
 
 config = {}
+logger = logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG)
 
 
 def loadConfig():
+    global logger
     exists = os.path.isfile('./rabbitMQ_conf.json')
     if exists:
-        logging.debug("-> loading \'rabbitMQ_conf.json\': file exists")
+        logger.debug("-> loading \'rabbitMQ_conf.json\': file exists")
         f = open('./rabbitMQ_conf.json', 'r')
         content = f.read()
         json_data = json.loads(content)
@@ -27,17 +29,18 @@ def loadConfig():
         config = json_data
         return True
     else:
-        logging.error("could not load \'rabbitMQ_conf.json\'")
+        logger.error("could not load \'rabbitMQ_conf.json\'")
         return False
 
 
 def create_dirs_if_needed(path):
+    global logger
     if not os.path.exists(path):
         try:
             os.makedirs(path)
         except OSError as e:
             if e.errno != errno.EEXISTS:
-                logging.error("could not create folder: " + path + " due to error" + e)
+                logger.error("could not create folder: " + path + " due to error" + e)
                 raise
 
 
@@ -64,7 +67,7 @@ def get_config_as_json(json_data):
 
 def deploy_service(ident, file_path, config):
     basic_service_path = os.path.expanduser("~") + "/.META/services/"
-
+    programm_start_path = os.getcwd() # path where this programm is started
     # create_folder_if_needed(basic_path)
     # create_dirs_if_needed(destination_path)
 
@@ -81,12 +84,16 @@ def deploy_service(ident, file_path, config):
 
     # copying service for stability and starting service
     shutil.copy2(file_path, os.getcwd())
-    service_path = os.getcwd() + "/ComputeUnitHandler"
-    proc = subprocess.Popen([service_path], shell=True)
-
-    result_dict = {}
-    result_dict["Service_location"] = service_path
-    result_dict["Service_pid"] = proc.pid
+    logger.info("copied files to cwd: " + os.getcwd())
+    service_path = os.path.join(os.getcwd(), "ComputeUnitHandler")
+    logger.info("new service_path: " + service_path)
+    os.chdir(programm_start_path)
+    result_dict = processStarter.startProcess(service_path)
+    # logger.debug("-> service startet: " + str(proc))
+    # result_dict = {}
+    # result_dict["Service_location"] = service_path
+    # result_dict["Service_pid"] = proc.pid
+    logger.info("new configuration created: " + str(result_dict))
 
     return result_dict
 
@@ -96,63 +103,75 @@ def deploy_service(ident, file_path, config):
 ####
 def subscriber():
     global config
-    logging.debug("-> try connection with config: " + json.dumps(config))
+    global logger
+    logger.debug("-> try connection with config: " + json.dumps(config))
     connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
-    logging.info("connection to server established...")
+    logger.info("connection to server established...")
     channel = connection.channel()
     channel.confirm_delivery()
-    logging.info("channel successfully created...")
+    logger.info("channel successfully created...")
     channel.queue_declare(queue=config['Read_queue'])
-    logging.info("queue successfully declared...")
+    logger.info("queue successfully declared...")
 
     # tell rabbitMQ to not send more than one message to this worker
     channel.basic_qos(prefetch_count=1)
     channel.basic_consume(callback_subscriber,
                           queue=config['Read_queue'])
-    logging.info("start consuming from queue...")
+    logger.info("start consuming from queue...")
     channel.start_consuming()
 
 
 def callback_subscriber(ch, method, properties, body):
+    global logger
+    logger.info("callback fired")
     body_as_json = json.loads(body)
-
+    # logger.info("loaded message body as json: " + body_as_json)
     service_config = get_config_as_json(body_as_json)
-
+    # logger.info("loaded service config: " + service_config)
     result_dict = deploy_service(body_as_json["Id"], body_as_json["Content"], service_config)
-
+    # logger.info("result config created: " + result_dict)
     publisher(json.dumps(result_dict))
+    logger.info("message published")
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 def publisher(message):
     global config
+    global logger
     try:
         connection = pika.BlockingConnection(pika.ConnectionParameters(config['Host']))
-        logging.info("connection to server established...")
+        logger.info("connection to server established...")
         channel = connection.channel()
-        logging.info("channel successfully created...")
+        logger.info("channel successfully created...")
         channel.queue_declare(queue=config['Write_queue'])
-        logging.info("queue successfully declared...")
+        logger.info("queue successfully declared...")
         channel.basic_publish(exchange=config['Exchange'],
                                 routing_key=config['Routing_key'],
                                 body=message)
 
-        logging.info("message successfully published: " + message + " " + config["Write_queue"] + " " + config["Exchange"] + " " + config["Routing_key"])
+        logger.info("message successfully published: " + message + " " + config["Write_queue"] + " " + config["Exchange"] + " " + config["Routing_key"])
         connection.close()
     except:
-        logging.error('could not publish message due to unexpected error')
+        logger.error('could not publish message due to unexpected error')
 
 
 ####
 # Main Method
 ####
 def main(argv):
-    logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG)
+    # logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG)
+    global logger
+    logger = logging.getLogger(__name__)
+    filehandler = logging.FileHandler('meta-deployment-service.log')
+    filehandler.setLevel(logging.DEBUG)
+    logger.addHandler(filehandler)
+
+
     # loading given Config file (./RabbitMQ_conf.json)
     if not loadConfig():
         return
 
-    logging.info("starting subscriber...")
+    logger.info("starting subscriber...")
     subscriber()
 
 

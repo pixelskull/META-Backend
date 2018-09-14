@@ -42,7 +42,7 @@ def createQueueWith(ident, suffix, host = "127.0.0.1", exchange = "meta.producti
                        queue=full_queue_name,
                        routing_key=queue_id)
     logging.debug("bind queue " + full_queue_name + " to Exchange " + exchange + " with key " + queue_id)
-    # closing connectiin no longer needed
+    # closing connection no longer needed
     connection.close()
     logging.info("closed connection to rabbitMQ instance...")
 
