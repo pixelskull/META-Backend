@@ -19,23 +19,24 @@ type JSONResponse struct {
 	Data interface{} `json:"data"` // generic typish?
 }
 
-var RabbitConf metaRabbitMQAdapter.Config
+// RabbitConf configures the RabbitMQ connection
+var RabbitConf metarabbitmqadapter.Config
 
 // function for publishing to rabbitMQ
-func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
+func rabbitMQPulish(conf metarabbitmqadapter.Config,
 	msg string) {
 
 	log.Println("publish:: conf setup")
 	// setup connection and channel
-	conn := metaRabbitMQAdapter.CreateConnection(conf)
+	conn := metarabbitmqadapter.CreateConnection(conf)
 	defer conn.Close()
-	ch := metaRabbitMQAdapter.CreateChannel(conn)
+	ch := metarabbitmqadapter.CreateChannel(conn)
 	defer ch.Close()
 
 	log.Println("publish:: channel setup")
 
 	// publish some message
-	metaRabbitMQAdapter.Publish(ch, conf, msg)
+	metarabbitmqadapter.Publish(ch, conf, msg)
 
 	log.Println("publish:: message published")
 }
@@ -58,18 +59,18 @@ func publishJSONToMessageQueueAndSubscribe(contents []byte, w http.ResponseWrite
 	rabbitMQPulish(tempConfig, string(contents))
 
 	// TODO: test this...
-	conn := metaRabbitMQAdapter.CreateConnection(RabbitConf)
-	ch := metaRabbitMQAdapter.CreateChannel(conn)
+	conn := metarabbitmqadapter.CreateConnection(RabbitConf)
+	ch := metarabbitmqadapter.CreateChannel(conn)
 
 	tempConfig.Queue = "meta.production." + jres.ID + "-result"
 
-	callback := func(delivery metaRabbitMQAdapter.RabbitDelivery) {
+	callback := func(delivery metarabbitmqadapter.RabbitDelivery) {
 		for d := range delivery {
 			w.Write(d.Body)
 		}
 	}
 
-	go metaRabbitMQAdapter.Subscribe(ch, tempConfig, callback)
+	go metarabbitmqadapter.Subscribe(ch, tempConfig, callback)
 }
 
 // validates json and proves scheme for requests
@@ -122,7 +123,7 @@ func dataUploadHandler(w http.ResponseWriter, r *http.Request) {
 	go handleRequest(w, r)
 }
 
-func loadRabbitMQConf() metaRabbitMQAdapter.Config {
+func loadRabbitMQConf() metarabbitmqadapter.Config {
 	// reading config file
 	file, err := os.Open("rabbitMQ_conf.json")
 	if err != nil {
@@ -132,7 +133,7 @@ func loadRabbitMQConf() metaRabbitMQAdapter.Config {
 
 	// preparing JSON Decoder
 	dec := json.NewDecoder(file)
-	configuration := metaRabbitMQAdapter.Config{}
+	configuration := metarabbitmqadapter.Config{}
 
 	// decode JSON
 	err = dec.Decode(&configuration)
