@@ -13,23 +13,26 @@ import shutil
 
 
 config = {}
-logger = logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG)
+logger = None
 
 
 def loadConfig():
     global logger
-    exists = os.path.isfile('./rabbitMQ_conf.json')
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    exists = os.path.isfile(dir_path + '/rabbitMQ_conf.json')
     if exists:
         logger.debug("-> loading \'rabbitMQ_conf.json\': file exists")
-        f = open('./rabbitMQ_conf.json', 'r')
+        f = open(dir_path + '/rabbitMQ_conf.json', 'r')
         content = f.read()
         json_data = json.loads(content)
 
         global config
         config = json_data
+        logger.info("RabbitMQ configuration file loaded")
         return True
     else:
         logger.error("could not load \'rabbitMQ_conf.json\'")
+        print("RabbitMQ configuration file not loaded")
         return False
 
 
@@ -160,10 +163,14 @@ def publisher(message):
 ####
 def main(argv):
     # logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG)
+    logging.basicConfig(filename='meta-deployment-service.log', level=logging.DEBUG, datefmt='%d-%m-%Y %H:%M:%S')
+
     global logger
     logger = logging.getLogger(__name__)
+    # logging.basicConfig(filename='ir-compilation-service.log', level=logging.DEBUG, datefmt='%d-%m-%Y %H:%M:%S')
+
     filehandler = logging.FileHandler('meta-deployment-service.log')
-    filehandler.setLevel(logging.DEBUG)
+    # filehandler.setLevel(logging.DEBUG)
     logger.addHandler(filehandler)
 
 
