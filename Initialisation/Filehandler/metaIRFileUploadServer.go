@@ -1,38 +1,40 @@
 package main
 
-import ("./metaFilehandler"
-				"./metaRabbitMQAdapter"
+import (
+	"./metaFilehandler"
+	"./metaRabbitMQAdapter"
 
-				"os"
-				"encoding/json"
-				"fmt"
-				"net/http"
-				"log"
-				"io/ioutil"
-				"crypto/md5"
-				"encoding/hex")
+	"crypto/md5"
+	"encoding/hex"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+)
 
-var RabbitConf metaRabbitMQAdapter.Config
+// RabbitConf configuration for RabbitMQ
+var RabbitConf metarabbitmqadapter.Config
 
 // function for publishing to rabbitMQ
-func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
-									  msg string) {
+func rabbitMQPulish(conf metarabbitmqadapter.Config,
+	msg string) {
 
 	log.Println("publish:: conf setup")
 	// setup connection and channel
-	conn := metaRabbitMQAdapter.CreateConnection(conf)
+	conn := metarabbitmqadapter.CreateConnection(conf)
 	defer conn.Close()
-	ch := metaRabbitMQAdapter.CreateChannel(conn)
+	ch := metarabbitmqadapter.CreateChannel(conn)
 	defer ch.Close()
 
 	log.Println("publish:: channel setup")
 
 	// publish some message
-	metaRabbitMQAdapter.Publish(ch, conf, msg)
+	metarabbitmqadapter.Publish(ch, conf, msg)
 
 	log.Println("publish:: message published")
 }
-
 
 func publishIRToMessageQueue(hash string, irFile string) {
 	// create map (key = hash | value = irFile)
@@ -48,9 +50,8 @@ func publishIRToMessageQueue(hash string, irFile string) {
 	log.Println("metaIRFileuploadServer:: publishing IR file with ID: " + hash)
 	// send over message queue
 	rabbitMQPulish(RabbitConf,
-								 string(jsonData))
+		string(jsonData))
 }
-
 
 // gets []byte and performs MD5 Hash (returns hash as string)
 func createMD5(contents []byte) string {
@@ -61,8 +62,7 @@ func createMD5(contents []byte) string {
 	return hex.EncodeToString(sum)
 }
 
-
-func loadRabbitMQConf() metaRabbitMQAdapter.Config {
+func loadRabbitMQConf() metarabbitmqadapter.Config {
 	// reading config file
 	file, err := os.Open("./rabbitMQ_conf.json")
 	if err != nil {
@@ -72,7 +72,7 @@ func loadRabbitMQConf() metaRabbitMQAdapter.Config {
 
 	// preparing JSON Decoder
 	dec := json.NewDecoder(file)
-	configuration := metaRabbitMQAdapter.Config{}
+	configuration := metarabbitmqadapter.Config{}
 
 	// decode JSON
 	err = dec.Decode(&configuration)
@@ -85,7 +85,6 @@ func loadRabbitMQConf() metaRabbitMQAdapter.Config {
 	return configuration
 }
 
-
 // Handler Method for uploaded files
 func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
@@ -96,7 +95,7 @@ func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 		contents, err := ioutil.ReadAll(r.Body)
 
 		if err != nil {
-			fmt.Fprintln(w, "404 -> " + err.Error())
+			fmt.Fprintln(w, "404 -> "+err.Error())
 			recover()
 		}
 		// create hash
@@ -115,7 +114,6 @@ func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-
 func main() {
 	// os.Setenv("PATH", os.Getenv("PATH") + ":/Users/pascal/Sync/Master Thesis/LLVM_Compiler_Tests/Sources")
 	// log.Println(os.Getenv("PATH"))
@@ -127,7 +125,6 @@ func main() {
 	// 	dirErr := os.Mkdir("tmp", os.ModeDir)
 	// 	if dirErr != nil { log.Println(dirErr) }
 	// }
-
 
 	RabbitConf = loadRabbitMQConf()
 	// log.Println("metaIRFileuploadServer:: loading config: " + RabbitConf)
