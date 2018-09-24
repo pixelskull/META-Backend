@@ -19,7 +19,7 @@ def write_to_file(filename="default.ll", file_content="NULL"):
 
 def find_xcproject_file(rootdir):
     result = ""
-    for root, _, files in os.walk(rootdir):
+    for _, _, files in os.walk(rootdir):
         for f in files:
             if f.endswith('.xcodeproj'):
                 result = f
