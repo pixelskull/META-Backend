@@ -1,26 +1,29 @@
 package main
 
-import ("./metaRabbitMQAdapter"
+import (
+	"./metaRabbitMQAdapter"
 
-        "os"
-        "log"
-        "fmt"
-        "net/http"
-        "io/ioutil"
-        "encoding/json"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 
-        "github.com/xeipuuv/gojsonschema")
+	"github.com/xeipuuv/gojsonschema"
+)
 
+// JSONResponse is used for communication between clients and server
 type JSONResponse struct {
-    Id string `json:"id"`
-    Data interface{} `json:"data"` // generic typish?
+	ID   string      `json:"id"`
+	Data interface{} `json:"data"` // generic typish?
 }
 
 var RabbitConf metaRabbitMQAdapter.Config
 
 // function for publishing to rabbitMQ
 func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
-									  msg string) {
+	msg string) {
 
 	log.Println("publish:: conf setup")
 	// setup connection and channel
@@ -39,69 +42,68 @@ func rabbitMQPulish(conf metaRabbitMQAdapter.Config,
 
 // wrapper for rabbitMQPulish (convinience)
 func publishJSONToMessageQueueAndSubscribe(contents []byte, w http.ResponseWriter) {
-  // decode json to get data
-  jres := &JSONResponse{}
-  err := json.Unmarshal([]byte(string(contents)), &jres)
+	// decode json to get data
+	jres := &JSONResponse{}
+	err := json.Unmarshal([]byte(string(contents)), &jres)
 
-  if err != nil {
+	if err != nil {
 		log.Println("metaIRFileuploadServer:: could not create json " + err.Error())
 		recover()
 	}
 
-  // set temp Configuration to adress this queue
-  tempConfig := RabbitConf
-  tempConfig.Queue = "meta.production." + jres.Id + "-work"
+	// set temp Configuration to adress this queue
+	tempConfig := RabbitConf
+	tempConfig.Queue = "meta.production." + jres.ID + "-work"
 
-  rabbitMQPulish(tempConfig, string(contents))
+	rabbitMQPulish(tempConfig, string(contents))
 
-  // TODO: test this...
-  conn := metaRabbitMQAdapter.CreateConnection(RabbitConf)
+	// TODO: test this...
+	conn := metaRabbitMQAdapter.CreateConnection(RabbitConf)
 	ch := metaRabbitMQAdapter.CreateChannel(conn)
 
-  tempConfig.Queue = + "meta.production." + jres.Id + "-result"
+	tempConfig.Queue = "meta.production." + jres.ID + "-result"
 
-  callback := func(delivery metaRabbitMQAdapter.RabbitDelivery){
-    for d := range delivery {
-        w.Write(d.Body)
-    }
-  }
+	callback := func(delivery metaRabbitMQAdapter.RabbitDelivery) {
+		for d := range delivery {
+			w.Write(d.Body)
+		}
+	}
 
-  go metaRabbitMQAdapter.Subscribe(ch, tempConfig, callback)
+	go metaRabbitMQAdapter.Subscribe(ch, tempConfig, callback)
 }
 
 // validates json and proves scheme for requests
 func validateJSON(json string) (bool, error) {
-  schema        := "file://./util/request_schema.json"
-  schemaLoader  := gojsonschema.NewReferenceLoader(schema)
-  contentLoader := gojsonschema.NewStringLoader(json)
+	schema := "file://./util/request_schema.json"
+	schemaLoader := gojsonschema.NewReferenceLoader(schema)
+	contentLoader := gojsonschema.NewStringLoader(json)
 
-  result, err := gojsonschema.Validate(schemaLoader, contentLoader)
+	result, err := gojsonschema.Validate(schemaLoader, contentLoader)
 
-  if result.Valid() && err == nil {
-    return true, err
-  } else {
-    return false, err
-  }
+	if result.Valid() && err == nil {
+		return true, err
+	}
+	return false, err
 }
 
 func handleRequest(w http.ResponseWriter, r *http.Request) {
-  switch r.Method {
+	switch r.Method {
 
 	case http.MethodPost:
 		log.Println("POST Called")
 		contents, err := ioutil.ReadAll(r.Body)
 
 		if err != nil {
-			fmt.Fprintln(w, "404 -> " + err.Error())
+			fmt.Fprintln(w, "404 -> "+err.Error())
 			recover()
 		}
 
-    // validating json data + error handling
-    valid, err := validateJSON(string(contents))
-    if !valid || err != nil {
-      fmt.Fprintln(w, "JSON send was not valid -> " + err.Error())
-      recover()
-    }
+		// validating json data + error handling
+		valid, err := validateJSON(string(contents))
+		if !valid || err != nil {
+			fmt.Fprintln(w, "JSON send was not valid -> "+err.Error())
+			recover()
+		}
 
 		// sending json to message-queue
 		go publishJSONToMessageQueueAndSubscribe(contents, w)
@@ -116,10 +118,9 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 // Handler Method for uploaded files
 func dataUploadHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.Method)
-  // handle Request in go Routine
-  go handleRequest(w, r)
+	// handle Request in go Routine
+	go handleRequest(w, r)
 }
-
 
 func loadRabbitMQConf() metaRabbitMQAdapter.Config {
 	// reading config file
@@ -144,11 +145,10 @@ func loadRabbitMQConf() metaRabbitMQAdapter.Config {
 	return configuration
 }
 
-
 func main() {
 	RabbitConf = loadRabbitMQConf()
 
-  // TODO: read tempfile if needed
+	// TODO: read tempfile if needed
 	// path := metaFilehandler.PrepareTempFolder()
 	// fmt.Println(path)
 	// defer os.RemoveAll(path)
