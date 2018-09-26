@@ -1,16 +1,18 @@
-package metaFilehandler
+package metafilehandler
 
-import("os"
-       "os/exec"
-       "log")
+import (
+	"log"
+	"os"
+	"os/exec"
+)
 
-// creates folder META in tempDir if not existing and returns the path
-func PrepareTempFolder() string{
+// PrepareTempFolder creates folder META in tempDir if not existing and returns the path
+func PrepareTempFolder() string {
 	tmpDir := os.TempDir()
-	path 	 := tmpDir + "META"
+	path := tmpDir + "META"
 
-	folder_exists, _ := Exists(path)
-	if folder_exists == false {
+	folderexists, _ := Exists(path)
+	if folderexists == false {
 		// create Folder and error handling
 		err := os.Mkdir(path, os.ModePerm) // TODO: check if umask problem still exists in tmp folder
 		if err != nil {
@@ -21,15 +23,15 @@ func PrepareTempFolder() string{
 	return path
 }
 
-// performs compilation on file
+// PerformFileAction compiles given file
 func PerformFileAction(hash string, contents []byte) error {
 	log.Println("started goroutine for sending file to kafka")
 
-	ir_file := SaveIRFile(hash, contents)
+	irfile := SaveIRFile(hash, contents)
 
 	app := "/usr/local/bin/compilation.py"
 
-	cmd := exec.Command(app, ir_file)
+	cmd := exec.Command(app, irfile)
 	stdout, err := cmd.Output()
 
 	if err != nil {
@@ -41,15 +43,19 @@ func PerformFileAction(hash string, contents []byte) error {
 	return nil
 }
 
-// exists returns whether the given file or directory exists or not
+// Exists returns whether the given file or directory exists or not
 func Exists(path string) (bool, error) {
 	_, err := os.Stat(path)
-	if err == nil { return true, nil }
-	if os.IsNotExist(err) { return false, nil }
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
 	return true, err
 }
 
-// saves content array to LLVM-IR file with given name (<name>.ll)
+// SaveIRFile saves content array to LLVM-IR file with given name (<name>.ll)
 func SaveIRFile(name string, contents []byte) string {
 	// create file to contain contents with name (eg. hash)
 	filePath := PrepareTempFolder() + name + ".ll" // "tmp/"  TODO: Change path to use folder if creation is done right
