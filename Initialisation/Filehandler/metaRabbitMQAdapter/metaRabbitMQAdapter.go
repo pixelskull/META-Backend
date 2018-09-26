@@ -10,15 +10,15 @@ import (
 
 // Config is the configuration struct used for server informations used by amqp for RabbitMQ connections
 type Config struct {
-	Host string
-	Port int
+	Host string `json:"Host"`
+	Port int    `json:"Port"`
 
-	Exchange   string
-	Queue      string
-	RoutingKey string
+	Exchange   string `json:"Exchange"`
+	Queue      string `json:"Queue"`
+	RoutingKey string `json:"Routing_key"`
 
-	User     string
-	Password string
+	User     string `json:"User"`
+	Password string `json:"Password"`
 }
 
 // RabbitConf is the Configuration struct for RabbitMQ
