@@ -102,7 +102,7 @@ func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 		hash := createMD5(contents)
 
 		// perform file saving and triggers action to perform
-		// go metaFilehandler.PerformFileAction(hash, contents)
+		// go metafilehandler.PerformFileAction(hash, contents)
 
 		go publishIRToMessageQueue(hash, string(contents))
 
@@ -129,7 +129,7 @@ func main() {
 	RabbitConf = loadRabbitMQConf()
 	// log.Println("metaIRFileuploadServer:: loading config: " + RabbitConf)
 
-	path := metaFilehandler.PrepareTempFolder()
+	path := metafilehandler.PrepareTempFolder()
 	fmt.Println(path)
 	// defer os.RemoveAll(path)
 

@@ -150,7 +150,7 @@ func main() {
 	RabbitConf = loadRabbitMQConf()
 
 	// TODO: read tempfile if needed
-	// path := metaFilehandler.PrepareTempFolder()
+	// path := metafilehandler.PrepareTempFolder()
 	// fmt.Println(path)
 	// defer os.RemoveAll(path)
 
