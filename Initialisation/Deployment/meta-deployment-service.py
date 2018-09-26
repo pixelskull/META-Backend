@@ -42,7 +42,7 @@ def create_dirs_if_needed(path):
         try:
             os.makedirs(path)
         except OSError as e:
-            if e.errno != errno.EEXISTS:
+            if e.errno != errno.EEXIST:
                 logger.error("could not create folder: " + path + " due to error" + e)
                 raise
 
