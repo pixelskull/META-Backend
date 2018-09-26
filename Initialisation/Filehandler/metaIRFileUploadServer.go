@@ -58,7 +58,7 @@ func createMD5(contents []byte) string {
 	hash := md5.New()
 	hash.Write(contents)
 	sum := hash.Sum(nil)
-	fmt.Println(hex.EncodeToString(sum))
+	log.Println(hex.EncodeToString(sum))
 	return hex.EncodeToString(sum)
 }
 
@@ -114,6 +114,18 @@ func fileuploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func prepareLogFile() *os.File {
+	// open a file
+	f, err := os.OpenFile("meta-ir-upload-server.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	if err != nil {
+		fmt.Printf("error opening file: %v", err)
+	}
+	// assign it to the standard logger
+	log.SetOutput(f)
+
+	return f
+}
+
 func main() {
 	// os.Setenv("PATH", os.Getenv("PATH") + ":/Users/pascal/Sync/Master Thesis/LLVM_Compiler_Tests/Sources")
 	// log.Println(os.Getenv("PATH"))
@@ -125,6 +137,9 @@ func main() {
 	// 	dirErr := os.Mkdir("tmp", os.ModeDir)
 	// 	if dirErr != nil { log.Println(dirErr) }
 	// }
+
+	logfile := prepareLogFile()
+	defer logfile.Close()
 
 	RabbitConf = loadRabbitMQConf()
 	// log.Println("metaIRFileuploadServer:: loading config: " + RabbitConf)
