@@ -16,7 +16,7 @@ import (
 // JSONResponse is used for communication between clients and server
 type JSONResponse struct {
 	ID   string      `json:"id"`
-	Data interface{} `json:"data"` // generic typish?
+	Data interface{} `json:"data"` 
 }
 
 // RabbitConf configures the RabbitMQ connection

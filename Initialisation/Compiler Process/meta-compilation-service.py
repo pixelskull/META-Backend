@@ -60,7 +60,7 @@ def compile_file(filename, ir_content):
     subprocess.call(['rm', bc_file])
 
     output_path = tempFolder + "/" + object_file
-    logging.debug("-> object file was stored at: " + output_path)
+    logging.debug("-> object file was stored at: %s" % (output_path))
     return output_path
 
 def compile_service(filepath, ident="service"):
