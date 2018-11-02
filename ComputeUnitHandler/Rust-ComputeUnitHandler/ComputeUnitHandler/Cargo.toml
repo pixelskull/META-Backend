@@ -1,8 +1,8 @@
 [package]
-name = "ComputeUnitHandler"
+name = "compute_unit_handler"
 version = "0.1.0"
 authors = ["pixelskull <pascal.schoenthier@th-koeln.de>"]
-default-features = false
+
 
 [dependencies]
 amqp = "0.1.2" 
