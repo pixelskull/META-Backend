@@ -1,0 +1,10 @@
+{
+    "Host": "example.com",
+    "Port": 1234,
+    "Read_queue": "this_to_read", 
+    "Exchange": "this_routes", 
+    "Write_queue": "this_to_write", 
+    "Routing_key": "not_that_secret", 
+    "User": "someone",
+    "Password": "very_secret"
+}
