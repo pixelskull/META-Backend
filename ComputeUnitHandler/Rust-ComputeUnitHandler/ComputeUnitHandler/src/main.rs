@@ -35,9 +35,11 @@ fn deserialize_from_string(string_content: String) -> AMQPConfig {
 }
 
 fn main() {
-    let mut session = Session::open_url("amqp://localhost//").unwrap();
+    let mut session = Session::open_url("amqp://127.0.0.1//").unwrap();
     let mut _channel = session.open_channel(1).unwrap();
 
-    let file_content = read_file("../misc/amqp.json.example".to_string()); 
-    let _conf = deserialize_from_string(file_content);
+    let file_content = read_file("/misc/amqp.json.example".to_string()); 
+    let conf = deserialize_from_string(file_content);
+
+    println!("{:?}", conf);
 }
