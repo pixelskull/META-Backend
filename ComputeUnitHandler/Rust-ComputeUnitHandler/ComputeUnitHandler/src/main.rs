@@ -24,14 +24,16 @@ struct AMQPConfig {
     password:       String  
 }
 
-fn read_file(path: String) -> String {
+// Helper method for reading string content of some file
+fn read_file(path: &String) -> String {
     let mut file = File::open(path).expect("file not found"); 
     let mut file_content = String::new(); 
     file.read_to_string(&mut file_content).expect("reading file failed.");
     file_content
 }
 
-fn deserialize_from_string(string_content: String) -> AMQPConfig {
+// Helper method for hiding serde_json call
+fn deserialize_from_string(string_content: &String) -> AMQPConfig {
     serde_json::from_str(&string_content).unwrap()
 }
 
@@ -44,8 +46,8 @@ fn main() {
     let res_path = "/misc/amqp.json.example".to_string();
     path_to_config.push_str(&res_path);
     println!("{:?}", &path_to_config);
-    let file_content = read_file(path_to_config); 
-    let conf = deserialize_from_string(file_content);
+    let file_content = read_file(&path_to_config); 
+    let conf = deserialize_from_string(&file_content);
 
     println!("{:?}", conf);
 }
