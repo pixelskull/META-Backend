@@ -7,6 +7,7 @@ extern crate serde_json;
 
 use std::fs::File;
 use std::io::prelude::*;
+use std::env;
 
 use amqp::Session;
 
@@ -14,7 +15,7 @@ use amqp::Session;
 #[derive(Serialize, Deserialize, Debug)]
 struct AMQPConfig {
     host:           String, 
-    port:           u8, 
+    port:           i16, 
     read_queue:     String, 
     exchange:       String, 
     write_queue:    String,
@@ -38,7 +39,12 @@ fn main() {
     let mut session = Session::open_url("amqp://127.0.0.1//").unwrap();
     let mut _channel = session.open_channel(1).unwrap();
 
-    let file_content = read_file("/misc/amqp.json.example".to_string()); 
+    let cwd = env::current_dir().unwrap(); 
+    let mut path_to_config: String = cwd.into_os_string().into_string().unwrap();
+    let res_path = "/misc/amqp.json.example".to_string();
+    path_to_config.push_str(&res_path);
+    println!("{:?}", &path_to_config);
+    let file_content = read_file(path_to_config); 
     let conf = deserialize_from_string(file_content);
 
     println!("{:?}", conf);
