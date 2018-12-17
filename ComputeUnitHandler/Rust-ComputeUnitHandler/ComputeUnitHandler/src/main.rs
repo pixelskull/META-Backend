@@ -11,6 +11,7 @@ use std::env;
 use amqp::*;
 
 use meta_helpers::file;
+use meta_helpers::rabbit_mq;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AMQPConfig {
@@ -27,13 +28,13 @@ pub struct AMQPConfig {
 
 
 fn main() {
-    // opening amqp connection to localhost 
-    let mut session = Session::open_url("amqp://127.0.0.1/").unwrap();
-    let mut _channel = session.open_channel(1).unwrap();
+    
+    let _channel = rabbit_mq::create_amqp_connection("127.0.0.1");
 
     // get current working dir
     let cwd = env::current_dir().unwrap(); 
     let mut path_to_config: String = cwd.into_os_string().into_string().unwrap();
+
     // path to config file inside of project folder (eq. ./)
     let res_path = "/misc/amqp.json.example".to_string();
     path_to_config.push_str(&res_path);

@@ -26,6 +26,14 @@ pub mod rabbit_mq {
 
     use amqp::*;
 
+    pub fn create_amqp_connection(host: &str) -> Channel {
+        // opening amqp connection to localhost 
+        let url = format!("amqp://{}/", host);
+        println!("{:?}", &url.to_string());
+        let mut session = Session::open_url(url.as_str()).unwrap();
+        session.open_channel(1).unwrap()
+    }
+
     pub fn amqp_consumer(channel: &mut Channel, deliver: protocol::basic::Deliver, headers: protocol::basic::BasicProperties, body: Vec<u8>) {
 
     }
