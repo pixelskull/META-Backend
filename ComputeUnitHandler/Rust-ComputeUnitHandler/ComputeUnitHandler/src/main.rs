@@ -1,19 +1,19 @@
 extern crate amqp;
 
+mod meta_helpers;
+
 #[macro_use]
 extern crate serde_derive;
 extern crate serde;
 extern crate serde_json;
 
-use std::fs::File;
-use std::io::prelude::*;
 use std::env;
+use amqp::*;
 
-use amqp::Session;
-
+use meta_helpers::file;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct AMQPConfig {
+pub struct AMQPConfig {
     host:           String, 
     port:           i16, 
     read_queue:     String, 
@@ -24,30 +24,26 @@ struct AMQPConfig {
     password:       String  
 }
 
-// Helper method for reading string content of some file
-fn read_file(path: &String) -> String {
-    let mut file = File::open(path).expect("file not found"); 
-    let mut file_content = String::new(); 
-    file.read_to_string(&mut file_content).expect("reading file failed.");
-    file_content
-}
 
-// Helper method for hiding serde_json call
-fn deserialize_from_string(string_content: &String) -> AMQPConfig {
-    serde_json::from_str(&string_content).unwrap()
-}
 
 fn main() {
-    let mut session = Session::open_url("amqp://127.0.0.1//").unwrap();
+    // opening amqp connection to localhost 
+    let mut session = Session::open_url("amqp://127.0.0.1/").unwrap();
     let mut _channel = session.open_channel(1).unwrap();
 
+    // get current working dir
     let cwd = env::current_dir().unwrap(); 
     let mut path_to_config: String = cwd.into_os_string().into_string().unwrap();
+    // path to config file inside of project folder (eq. ./)
     let res_path = "/misc/amqp.json.example".to_string();
     path_to_config.push_str(&res_path);
+    
+    // DEBUG output for testing 
     println!("{:?}", &path_to_config);
-    let file_content = read_file(&path_to_config); 
-    let conf = deserialize_from_string(&file_content);
+
+    // get configuration file content 
+    let file_content = file::read_file(&path_to_config); 
+    let conf = file::deserialize_from_string(&file_content); // meta_helpers.deserialize_from_string(&file_content);
 
     println!("{:?}", conf);
 }
